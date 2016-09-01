@@ -7,7 +7,7 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "com.mredrock.cyxbs"
+        applicationId "com.mredrock.cyxbs.material"
         minSdkVersion 14
         targetSdkVersion 24
         versionCode 33
