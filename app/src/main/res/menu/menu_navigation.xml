@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/item_course"
+          android:title="@string/course"
+          android:icon="@drawable/ic_course_select"
+          android:checkable="true"/>
+
+    <item android:id="@+id/item_community"
+          android:title="@string/community"
+          android:icon="@drawable/ic_home_select"
+          android:checkable="true"/>
+
+    <item android:id="@+id/item_explorer"
+          android:title="@string/explore"
+          android:icon="@drawable/ic_explore_select"
+          android:checkable="true"/>
+
+    <item android:id="@+id/item_me"
+          android:title="@string/my_page">
+
+        <menu>
+
+            <item android:id="@+id/item_relate_me"
+                  android:title="@string/my_page_relate"
+                  android:icon="@drawable/ic_my_page_relate"
+                  android:checkable="true"/>
+
+            <item android:id="@+id/item_my_trend"
+                  android:title="@string/my_page_trend"
+                  android:icon="@drawable/ic_my_page_trend"
+                  android:checkable="true"/>
+
+            <item android:id="@+id/item_no_course"
+                  android:title="@string/my_page_no_course"
+                  android:icon="@drawable/ic_my_page_no_course"
+                  android:checkable="true"/>
+
+            <item android:id="@+id/item_empty_room"
+                  android:title="@string/my_page_empty"
+                  android:icon="@drawable/ic_my_page_empty"
+                  android:checkable="true"/>
+
+            <item android:id="@+id/item_exam_and_grade"
+                  android:title="@string/my_page_grade"
+                  android:icon="@drawable/ic_my_page_grade"
+                  android:checkable="true"/>
+
+            <item android:id="@+id/item_school_calendar"
+                  android:title="@string/my_page_calendar"
+                  android:icon="@drawable/ic_my_page_calendar"
+                  android:checkable="true"/>
+
+        </menu>
+
+    </item>
+
+    <item android:id="@+id/item_setting"
+          android:title="@string/my_page_setting">
+
+        <menu>
+
+            <item android:id="@+id/item_feedback"
+                  android:title="@string/setting_feedback"
+                  android:checkable="false"/>
+
+            <item android:id="@+id/item_about"
+                  android:title="@string/setting_about"
+                  android:checkable="false"/>
+
+        </menu>
+
+    </item>
+
+</menu>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/mdc_light_blue_800"
+              android:padding="12dp">
+
+    <com.mredrock.cyxbs.component.widget.StatusBarMarginView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:in_navigation="true"/>
+
+    <com.github.siyamed.shapeimageview.CircularImageView
+        android:id="@+id/nh_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/nh_background"/>
+
+    <TextView
+        android:id="@+id/nh_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:text="没有昵称的孩子"
+        android:textColor="@color/white"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/nh_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="姓名"
+        android:textColor="@color/white"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/nh_stu_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2015111222"
+        android:textColor="@color/white"
+        android:textSize="12sp"/>
+
+
+</LinearLayout>

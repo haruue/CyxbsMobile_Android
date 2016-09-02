@@ -1,11 +1,13 @@
 package com.mredrock.cyxbs.component.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.jude.utils.JUtils;
+import com.mredrock.cyxbs.R;
 
 /**
  * 自适应 Status Bar 的空白 View ，请加入到所有 Activity 以及 Drawer 的 Layout 顶部
@@ -18,21 +20,28 @@ import com.jude.utils.JUtils;
 
 public class StatusBarMarginView extends View {
 
+    boolean inNavigation;
+
     public StatusBarMarginView(Context context) {
         super(context);
     }
 
     public StatusBarMarginView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public StatusBarMarginView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.StatusBarMarginView);
+        inNavigation = a.getBoolean(R.styleable.StatusBarMarginView_in_navigation, false);
+        a.recycle();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        // 兼容 SDK 19
+        int sdkVersion = inNavigation ? Build.VERSION_CODES.LOLLIPOP : Build.VERSION_CODES.KITKAT;
+        if (Build.VERSION.SDK_INT >= sdkVersion) {
             setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec), JUtils.getStatusBarHeight());
         } else {
             setMeasuredDimension(0, 0);
