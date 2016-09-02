@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatDelegate;
 
 import com.excitingboat.freshmanspecial.App;
 import com.google.gson.Gson;
+import com.jude.utils.JUtils;
 import com.mredrock.cyxbs.config.Const;
 import com.mredrock.cyxbs.model.User;
 import com.mredrock.cyxbs.util.SPUtils;
@@ -102,8 +103,9 @@ public class APP extends Application {
 
         context = getApplicationContext();
         initThemeMode();
-        //  FIR.init(this);
         Logger.init("cyxbs_mobile");
+        // initialize Jude Utils
+        JUtils.initialize(this);
         // Initialize FreshSpecial As library
         App.initializeLibrary(getContext());
 

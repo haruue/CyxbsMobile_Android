@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="white">#ffffff</color>
-    <color name="orange">#ff7d37</color>
-    <color name="yellow">#ffb048</color>
-    <color name="grey">#f3f7fa</color>
-    <color name="pink">#ef8f9f</color>
+    <color name="white">@color/mdc_white</color>
+    <color name="orange">@color/mdc_orange_500</color>
+    <color name="yellow">@color/mdc_yellow_500</color>
+    <color name="grey">@color/mdc_gray_500</color>
+    <color name="pink">@color/mdc_pink_500</color>
     <color name="data_light_black">#a9a9a9</color>
 
     <!--Common-->
-    <color name="colorPrimary">#00aae8</color>
-    <color name="colorPrimaryDark">#0088ba</color>
-    <color name="colorAccent">#f76060</color>
+    <color name="colorPrimary">@color/mdc_teal_800</color>
+    <color name="colorPrimaryDark">@color/mdc_teal_900</color>
+    <color name="colorAccent">@color/mdc_red_300</color>
     <color name="tabIndicatorColor">#c9c9c9</color>
     <color name="tab_background_pressed">#1Affffff</color>
     <color name="tabText">#66000000</color>

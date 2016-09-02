@@ -84,4 +84,7 @@
         <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.FitsSystemWindow.Base" parent="AppTheme"/>
+    <style name="AppTheme.FitsSystemWindow" parent="AppTheme.FitsSystemWindow.Base"/>
+    
 </resources>
