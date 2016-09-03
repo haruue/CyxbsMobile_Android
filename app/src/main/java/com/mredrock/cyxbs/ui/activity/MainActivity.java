@@ -320,7 +320,9 @@ public class MainActivity extends BaseActivity {
             ImageLoader.getInstance().loadAvatar(user.photo_thumbnail_src, avatarView);
             nicknameView.setText(user.nickname);
             usernameView.setText(user.name);
+            usernameView.setVisibility(View.VISIBLE);
             stuNumView.setText(user.stuNum);
+            stuNumView.setVisibility(View.VISIBLE);
             headView.setOnClickListener(null);
             headView.setBackgroundResource(R.color.mdc_light_blue_800);
             avatarAlpha.setVisibility(View.VISIBLE);
