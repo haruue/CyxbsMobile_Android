@@ -7,16 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
+import com.excitingboat.freshmanspecial.view.adapter.NavigationBarMarginRecyclerAdapter;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.model.Exam;
 import com.mredrock.cyxbs.util.SchoolCalendar;
 
 import java.util.List;
 
-public class ExamScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class ExamScheduleAdapter extends NavigationBarMarginRecyclerAdapter<RecyclerView.ViewHolder> {
     public static final int HEADER = 0;
     public static final int NORMAL = 1;
 
@@ -31,7 +32,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getArrayItemViewType(int position) {
         if (position == 0) {
             return HEADER;
         } else {
@@ -41,7 +42,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         if (viewType == HEADER) {
             final View view = LayoutInflater.from(mContext).inflate(R.layout.item_exam_first, parent, false);
             return new ExamHeaderViewHolder(view);
@@ -52,7 +53,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindArrayViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         int type = viewHolder.getItemViewType();
         if (type == HEADER) {
             bindHeadViewHolder((ExamHeaderViewHolder) viewHolder);
@@ -133,7 +134,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
     @Override
-    public int getItemCount() {
+    public int getArrayItemCount() {
         return mExamList.size();
     }
 

@@ -7,27 +7,9 @@
     android:orientation="vertical"
     tools:context=".ui.activity.me.ExamAndGradeActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:elevation="0dp">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="18sp"/>
-
-        </android.support.v7.widget.Toolbar>
+        <include
+            android:id="@+id/about_toolbar"
+            layout="@layout/toolbar" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/exam_grade_tab_layout"
@@ -40,8 +22,6 @@
             app:tabIndicatorColor="@color/colorPrimary"
             app:tabMode="fixed"
             />
-
-    </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

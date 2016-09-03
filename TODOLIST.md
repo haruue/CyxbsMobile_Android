@@ -1,15 +1,9 @@
 ## 适配 NavigationMargin
-+ 与我相关
-+ 我的动态
 + 空教室
-+ 考试与成绩
-+ 校历
-+ 关于
 + 地图
 + 新生网重邮风采的“学生代表”和“教师代表”，Grid 的 RecyclerView
 
 ## 适配 StatusbarMargin
-+ 哔哔叨叨发布
 + 地图
 
 ## 杂项

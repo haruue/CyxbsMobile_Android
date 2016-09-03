@@ -7,21 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.component.widget.NoScrollGridView;
 import com.mredrock.cyxbs.model.EmptyRoom;
-import com.mredrock.cyxbs.ui.adapter.BaseRecyclerViewAdapter;
+import com.mredrock.cyxbs.ui.adapter.NavigationBarMarginRecyclerAdapter;
 
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
  * Created by skylineTan on 2016/4/19 10:59.
  */
-public class EmptyAdapter extends BaseRecyclerViewAdapter<EmptyRoom,
+public class EmptyAdapter extends NavigationBarMarginRecyclerAdapter<EmptyRoom,
         EmptyAdapter.ViewHolder> {
 
 
@@ -31,7 +31,7 @@ public class EmptyAdapter extends BaseRecyclerViewAdapter<EmptyRoom,
 
 
     @Override
-    protected void bindData(ViewHolder holder, EmptyRoom data, int position) {
+    protected void bindArrayData(ViewHolder holder, EmptyRoom data, int position) {
         if (position == 0) {
             holder.vLine.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         }
@@ -42,7 +42,7 @@ public class EmptyAdapter extends BaseRecyclerViewAdapter<EmptyRoom,
 
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_empty,
                         parent, false));

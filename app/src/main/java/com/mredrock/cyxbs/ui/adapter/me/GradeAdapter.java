@@ -8,19 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.model.Grade;
-import com.mredrock.cyxbs.ui.adapter.BaseRecyclerViewAdapter;
+import com.mredrock.cyxbs.ui.adapter.NavigationBarMarginRecyclerAdapter;
 
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by skylineTan on 2016/4/21 19:16.
  */
-public class GradeAdapter extends BaseRecyclerViewAdapter<Grade, GradeAdapter
+public class GradeAdapter extends NavigationBarMarginRecyclerAdapter<Grade, GradeAdapter
         .ViewHolder> {
 
     private String drawer_primary_text = "#DE000000";
@@ -34,7 +34,7 @@ public class GradeAdapter extends BaseRecyclerViewAdapter<Grade, GradeAdapter
 
 
     @Override
-    protected void bindData(ViewHolder holder, Grade data, int position) {
+    protected void bindArrayData(ViewHolder holder, Grade data, int position) {
         setItemBackgroundColor(holder.itemView, position);
         holder.mTvCourse.setText(data.course);
         trySetGradeTitleColor(holder, position);
@@ -44,7 +44,7 @@ public class GradeAdapter extends BaseRecyclerViewAdapter<Grade, GradeAdapter
 
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(mContext).inflate(R.layout.item_grade, parent, false);
         return new ViewHolder(view);
     }

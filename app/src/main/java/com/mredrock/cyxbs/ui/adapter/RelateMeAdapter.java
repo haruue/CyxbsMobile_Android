@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by skylineTan on 2016/4/10 16:39.
  */
-public class RelateMeAdapter extends BaseRecyclerViewAdapter<RelateMe,
+public class RelateMeAdapter extends NavigationBarMarginRecyclerAdapter<RelateMe,
         RelateMeAdapter.ViewHolder> {
 
     public RelateMeAdapter(List<RelateMe> mDatas, Context context) {
@@ -24,7 +24,7 @@ public class RelateMeAdapter extends BaseRecyclerViewAdapter<RelateMe,
 
 
     @Override
-    protected void bindData(ViewHolder holder, RelateMe data, int position) {
+    protected void bindArrayData(ViewHolder holder, RelateMe data, int position) {
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -35,7 +35,7 @@ public class RelateMeAdapter extends BaseRecyclerViewAdapter<RelateMe,
 
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout
                 .item_relate_me, parent, false));
     }

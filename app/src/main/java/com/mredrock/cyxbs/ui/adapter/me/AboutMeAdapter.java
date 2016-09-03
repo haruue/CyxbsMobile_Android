@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.model.AboutMe;
-import com.mredrock.cyxbs.ui.adapter.BaseRecyclerViewAdapter;
+import com.mredrock.cyxbs.ui.adapter.NavigationBarMarginRecyclerAdapter;
 import com.mredrock.cyxbs.util.ImageLoader;
 import com.mredrock.cyxbs.util.TimeUtils;
 
@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * Created by skylineTan on 2016/4/28 01:08.
  */
-public class AboutMeAdapter extends BaseRecyclerViewAdapter<AboutMe, AboutMeAdapter.ViewHolder> {
+public class AboutMeAdapter extends NavigationBarMarginRecyclerAdapter<AboutMe, AboutMeAdapter.ViewHolder> {
 
     private static final String TYPE_PRAISE = "praise";
     private static final String TYPE_COMMENT = "remark";
@@ -39,7 +39,7 @@ public class AboutMeAdapter extends BaseRecyclerViewAdapter<AboutMe, AboutMeAdap
 
 
     @Override
-    protected void bindData(ViewHolder holder, AboutMe data, int position) {
+    protected void bindArrayData(ViewHolder holder, AboutMe data, int position) {
         holder.aboutMeNickName.setText(data.nickname.equals("") ? "来自一位没有名字的同学" : data.nickname);
         holder.aboutMeContent.setText(data.content);
         holder.aboutMeTime.setText(TimeUtils.getTimeDetail(data.created_time));
@@ -74,7 +74,7 @@ public class AboutMeAdapter extends BaseRecyclerViewAdapter<AboutMe, AboutMeAdap
 
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_relate_me,
                         parent, false));
