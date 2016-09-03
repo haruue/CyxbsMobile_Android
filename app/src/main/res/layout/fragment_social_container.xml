@@ -8,8 +8,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="0dp">
+        android:layout_height="wrap_content">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/community_TabLayout"
@@ -22,7 +21,7 @@
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/colorPrimary"
             app:tabTextColor="@color/tabText"
-            app:elevation="0dp"/>
+            app:elevation="-1dp"/>
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
