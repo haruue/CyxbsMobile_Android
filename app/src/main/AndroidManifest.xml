@@ -93,11 +93,13 @@
             android:launchMode="singleTask"/>
         <activity
             android:name=".component.multi_image_selector.MultiImageSelectorActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".ui.activity.social.ImageActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".ui.activity.social.PersonInfoActivity" />
 
         <service
