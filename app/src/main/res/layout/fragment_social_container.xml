@@ -45,11 +45,13 @@
             android:id="@+id/fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_margin="@dimen/fab_margin"
             android:layout_alignParentRight="true"
             android:layout_above="@id/navigation_bar_margin_view"
             android:background="@color/colorAccent"
             app:fabSize="normal"
+            app:elevation="@dimen/fab_elevation"
+            app:pressedTranslationZ="@dimen/fab_translation_z"
             android:src="@drawable/ic_add"/>
 
     </RelativeLayout>
