@@ -40,12 +40,15 @@ public class StatusBarMarginView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // 兼容 SDK 19
-        int sdkVersion = inNavigation ? Build.VERSION_CODES.LOLLIPOP : Build.VERSION_CODES.KITKAT;
-        if (Build.VERSION.SDK_INT >= sdkVersion) {
+        if (isNeedMargin(inNavigation)) {
             setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec), JUtils.getStatusBarHeight());
         } else {
             setMeasuredDimension(0, 0);
         }
     }
 
+    public static boolean isNeedMargin(boolean inNavigation) {
+        int sdkVersion = inNavigation ? Build.VERSION_CODES.LOLLIPOP : Build.VERSION_CODES.KITKAT;
+        return Build.VERSION.SDK_INT >= sdkVersion;
+    }
 }

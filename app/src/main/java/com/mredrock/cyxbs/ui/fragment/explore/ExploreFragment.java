@@ -22,7 +22,6 @@ import com.mredrock.cyxbs.ui.activity.explore.WhatToEatActivity;
 import com.mredrock.cyxbs.ui.adapter.ExploreRollViewPagerAdapter;
 import com.mredrock.cyxbs.ui.fragment.BaseFragment;
 import com.mredrock.cyxbs.util.LogUtils;
-import com.mredrock.cyxbs.util.WebViewUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

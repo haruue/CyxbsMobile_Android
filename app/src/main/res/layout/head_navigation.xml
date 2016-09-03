@@ -18,7 +18,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="12dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/nh_background"/>
+        android:src="@drawable/ic_default_avatar_with_bg_white"/>
 
     <TextView
         android:id="@+id/nh_nickname"

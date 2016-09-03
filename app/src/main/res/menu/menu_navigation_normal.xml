@@ -17,39 +17,48 @@
           android:checkable="true"/>
 
     <item android:id="@+id/item_me"
-          android:title="@string/my_page">
+          android:title="@string/community_hot">
 
         <menu>
 
             <item android:id="@+id/item_relate_me"
                   android:title="@string/my_page_relate"
                   android:icon="@drawable/ic_my_page_relate"
-                  android:checkable="true"/>
+                  android:checkable="false"/>
 
             <item android:id="@+id/item_my_trend"
                   android:title="@string/my_page_trend"
                   android:icon="@drawable/ic_my_page_trend"
-                  android:checkable="true"/>
+                  android:checkable="false"/>
+
+        </menu>
+
+    </item>
+
+    <item android:id="@+id/item_school"
+          android:title="@string/life">
+
+        <menu>
 
             <item android:id="@+id/item_no_course"
                   android:title="@string/my_page_no_course"
                   android:icon="@drawable/ic_my_page_no_course"
-                  android:checkable="true"/>
+                  android:checkable="false"/>
 
             <item android:id="@+id/item_empty_room"
                   android:title="@string/my_page_empty"
                   android:icon="@drawable/ic_my_page_empty"
-                  android:checkable="true"/>
+                  android:checkable="false"/>
 
             <item android:id="@+id/item_exam_and_grade"
                   android:title="@string/my_page_grade"
                   android:icon="@drawable/ic_my_page_grade"
-                  android:checkable="true"/>
+                  android:checkable="false"/>
 
             <item android:id="@+id/item_school_calendar"
                   android:title="@string/my_page_calendar"
                   android:icon="@drawable/ic_my_page_calendar"
-                  android:checkable="true"/>
+                  android:checkable="false"/>
 
         </menu>
 

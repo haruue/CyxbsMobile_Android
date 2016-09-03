@@ -3,20 +3,27 @@ package com.mredrock.cyxbs.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
+import com.github.siyamed.shapeimageview.CircularImageView;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
-import com.mredrock.cyxbs.component.widget.bottombar.BottomBar;
+import com.mredrock.cyxbs.component.widget.NavigationBarMarginView;
 import com.mredrock.cyxbs.event.LoginEvent;
 import com.mredrock.cyxbs.event.LoginStateChangeEvent;
+import com.mredrock.cyxbs.event.OnNavigationMenuSelectedItemChangeEvent;
+import com.mredrock.cyxbs.model.User;
 import com.mredrock.cyxbs.network.RequestManager;
 import com.mredrock.cyxbs.ui.activity.social.PostNewsActivity;
 import com.mredrock.cyxbs.ui.adapter.TabPagerAdapter;
@@ -26,10 +33,12 @@ import com.mredrock.cyxbs.ui.fragment.UnLoginFragment;
 import com.mredrock.cyxbs.ui.fragment.UserFragment;
 import com.mredrock.cyxbs.ui.fragment.explore.ExploreFragment;
 import com.mredrock.cyxbs.ui.fragment.social.SocialContainerFragment;
+import com.mredrock.cyxbs.util.ImageLoader;
 import com.mredrock.cyxbs.util.UpdateUtil;
-import com.mredrock.cyxbs.util.Utils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -46,8 +55,12 @@ public class MainActivity extends BaseActivity {
     Toolbar mToolbar;
     @Bind(R.id.main_coordinator_layout)
     CoordinatorLayout mCoordinatorLayout;
-    @Bind(R.id.bottom_bar)
-    BottomBar mBottomBar;
+//    @Bind(R.id.bottom_bar)
+//    BottomBar mBottomBar;
+    @Bind(R.id.main_drawer)
+    DrawerLayout mDrawerLayout;
+    @Bind(R.id.main_navigation)
+    NavigationView mNavigationView;
     @Bind(R.id.main_view_pager)
     ViewPager mViewPager;
 
@@ -109,32 +122,23 @@ public class MainActivity extends BaseActivity {
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), mFragments, titles);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(4);
+        refreshNavigationView();
+    }
 
-        mBottomBar.post(() -> hiddenMenu());
-        mBottomBar.setOnBottomViewClickListener((view, position) -> {
-            mViewPager.setCurrentItem(position, false);
-            hiddenMenu();
-            setTitle(mAdapter.getPageTitle(position));
-            switch (position) {
-                case 1:
-                    showMenu();
-                    Log.d(TAG, "initView: 1");
-                    break;
-                case 0:
-                    Log.d(TAG, "initView: 0");
-                    setTitle(((CourseContainerFragment) courseContainerFragment).getTitle());
-                    break;
-                case 3:
-                    if (!APP.isLogin()) {
-                        Log.d(TAG, "initView: 3");
-//                        EventBus.getDefault().post(new LoginEvent());
-                    }
-                    break;
-                default:
-                    break;
-            }
-        });
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        switch (getCurrentPosition()) {
+            case 0:
+                EventBus.getDefault().post(new OnNavigationMenuSelectedItemChangeEvent(R.id.item_course));
+                break;
+            case 1:
+                EventBus.getDefault().post(new OnNavigationMenuSelectedItemChangeEvent(R.id.item_community));
+                break;
+            case 2:
+                EventBus.getDefault().post(new OnNavigationMenuSelectedItemChangeEvent(R.id.item_explorer));
+                break;
+        }
     }
 
     @Override
@@ -149,9 +153,10 @@ public class MainActivity extends BaseActivity {
         } else {
             mFragments.remove(0);
             mFragments.add(0, new CourseContainerFragment());
-            mBottomBar.setCurrentView(0);
+//            mBottomBar.setCurrentView(0);
             mAdapter.notifyDataSetChanged();
         }
+        refreshNavigationHeader();
     }
 
     private void initToolbar() {
@@ -188,7 +193,7 @@ public class MainActivity extends BaseActivity {
                     if (APP.getUser(this).id == null || APP.getUser(this).id.equals("0")) {
                         RequestManager.getInstance().checkWithUserId("还没有完善信息，不能发动态哟！");
                         mViewPager.setCurrentItem(3);
-                        mBottomBar.setCurrentView(3);
+//                        mBottomBar.setCurrentView(3);
                         return super.onOptionsItemSelected(item);
                     } else
                         PostNewsActivity.startActivity(this);
@@ -233,4 +238,85 @@ public class MainActivity extends BaseActivity {
         return mViewPager.getCurrentItem();
     }
 
+    public void refreshNavigationView() {
+        refreshNavigationHeader();
+        // add a item as margin for immersive
+        if (NavigationBarMarginView.isNeedMargin(this)) {
+            mNavigationView.getMenu().add("").setEnabled(false);
+        }
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                EventBus.getDefault().post(new OnNavigationMenuSelectedItemChangeEvent(item.getItemId()));
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNaviagtionMenuSelectedItemChangeEvent(OnNavigationMenuSelectedItemChangeEvent event) {
+        mNavigationView.setCheckedItem(event.getItemId());
+        switch (event.getItemId()) {
+            case R.id.item_course:
+                mViewPager.setCurrentItem(0);
+                setTitle(((CourseContainerFragment) courseContainerFragment).getTitle());
+                break;
+            case R.id.item_community:
+                mViewPager.setCurrentItem(1);
+                setTitle(R.string.community);
+                break;
+            case R.id.item_explorer:
+                mViewPager.setCurrentItem(2);
+                setTitle(R.string.explore);
+                break;
+            case R.id.item_relate_me:
+                break;
+            case R.id.item_my_trend:
+                break;
+            case R.id.item_no_course:
+                break;
+            case R.id.item_empty_room:
+                break;
+            case R.id.item_exam_and_grade:
+                break;
+            case R.id.item_school_calendar:
+                break;
+            case R.id.item_feedback:
+                break;
+            case R.id.item_about:
+                break;
+        }
+    }
+
+    public void refreshNavigationHeader() {
+        View headView = mNavigationView.getHeaderView(0);
+        CircularImageView avatarView = (CircularImageView) headView.findViewById(R.id.nh_avatar);
+        TextView nicknameView = (TextView) headView.findViewById(R.id.nh_nickname);
+        TextView usernameView = (TextView) headView.findViewById(R.id.nh_username);
+        TextView stuNumView = (TextView) headView.findViewById(R.id.nh_stu_num);
+        if (APP.isLogin()) {
+            User user = APP.getUser(this);
+            ImageLoader.getInstance().loadAvatar(user.photo_thumbnail_src, avatarView);
+            nicknameView.setText(user.nickname);
+            usernameView.setText(user.name);
+            stuNumView.setText(user.stuNum);
+            headView.setOnClickListener(null);
+        } else {
+            avatarView.setImageResource(R.drawable.ic_default_avatar_with_bg_white);
+            nicknameView.setText(R.string.check_me_to_login);
+            usernameView.setVisibility(View.GONE);
+            stuNumView.setVisibility(View.GONE);
+            headView.setOnClickListener(v -> EventBus.getDefault().post(new LoginEvent()));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
