@@ -310,6 +310,7 @@ public class MainActivity extends BaseActivity {
     public void refreshNavigationHeader() {
         View headView = mNavigationView.getHeaderView(0);
         CircularImageView avatarView = (CircularImageView) headView.findViewById(R.id.nh_avatar);
+        CircularImageView avatarAlpha = (CircularImageView) headView.findViewById(R.id.nh_avatar_alpha);
         TextView nicknameView = (TextView) headView.findViewById(R.id.nh_nickname);
         TextView usernameView = (TextView) headView.findViewById(R.id.nh_username);
         TextView stuNumView = (TextView) headView.findViewById(R.id.nh_stu_num);
@@ -320,14 +321,18 @@ public class MainActivity extends BaseActivity {
             usernameView.setText(user.name);
             stuNumView.setText(user.stuNum);
             headView.setOnClickListener(null);
-            avatarView.setOnClickListener(v -> EventBus.getDefault().post(new OnNavigationMenuSelectedItemChangeEvent(R.id.item_account)));
+            headView.setBackgroundResource(R.color.mdc_light_blue_800);
+            avatarAlpha.setVisibility(View.VISIBLE);
+            avatarAlpha.setOnClickListener(v -> EventBus.getDefault().post(new OnNavigationMenuSelectedItemChangeEvent(R.id.item_account)));
         } else {
             avatarView.setImageResource(R.drawable.ic_default_avatar_with_bg_white);
             nicknameView.setText(R.string.check_me_to_login);
             usernameView.setVisibility(View.GONE);
             stuNumView.setVisibility(View.GONE);
             headView.setOnClickListener(v -> EventBus.getDefault().post(new LoginEvent()));
-            avatarView.setOnClickListener(null);
+            headView.setBackgroundResource(R.drawable.bg_head_navigation_selectable);
+            avatarAlpha.setOnClickListener(null);
+            avatarAlpha.setVisibility(View.GONE);
         }
     }
 

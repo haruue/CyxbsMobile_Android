@@ -12,14 +12,26 @@
         android:layout_height="wrap_content"
         app:in_navigation="true"/>
 
-    <com.github.siyamed.shapeimageview.CircularImageView
-        android:id="@+id/nh_avatar"
+    <FrameLayout
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="12dp"
-        android:scaleType="fitCenter"
-        android:foreground="?attr/selectableItemBackground"
-        android:src="@drawable/ic_default_avatar_with_bg_white"/>
+        android:layout_marginBottom="12dp">
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/nh_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_default_avatar_with_bg_white"/>
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/nh_avatar_alpha"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/circle_alpha_selectable_white"/>
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/nh_nickname"

@@ -77,4 +77,6 @@
 
     <color name="link_blue">#295998</color>
 
+    <color name="half_alpha_white">#55FFFFFF</color>
+
 </resources>
