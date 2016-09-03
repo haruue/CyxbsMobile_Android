@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import com.mredrock.cyxbs.event.LoginEvent;
 import com.mredrock.cyxbs.event.LoginStateChangeEvent;
 import com.mredrock.cyxbs.event.OnNavigationMenuSelectedItemChangeEvent;
 import com.mredrock.cyxbs.model.User;
-import com.mredrock.cyxbs.network.RequestManager;
 import com.mredrock.cyxbs.ui.activity.me.AboutActivity;
 import com.mredrock.cyxbs.ui.activity.me.AboutMeActivity;
 import com.mredrock.cyxbs.ui.activity.me.EditInfoActivity;
@@ -35,7 +33,6 @@ import com.mredrock.cyxbs.ui.activity.me.ExamAndGradeActivity;
 import com.mredrock.cyxbs.ui.activity.me.MyTrendActivity;
 import com.mredrock.cyxbs.ui.activity.me.NoCourseActivity;
 import com.mredrock.cyxbs.ui.activity.me.SchoolCalendarActivity;
-import com.mredrock.cyxbs.ui.activity.social.PostNewsActivity;
 import com.mredrock.cyxbs.ui.adapter.TabPagerAdapter;
 import com.mredrock.cyxbs.ui.fragment.BaseFragment;
 import com.mredrock.cyxbs.ui.fragment.CourseContainerFragment;
@@ -90,7 +87,6 @@ public class MainActivity extends BaseActivity {
     BaseFragment userFragment;
     BaseFragment unLoginFragment;
 
-    private Menu mMenu;
     private ArrayList<Fragment> mFragments;
     private TabPagerAdapter mAdapter;
 
@@ -177,6 +173,8 @@ public class MainActivity extends BaseActivity {
             if (actionBar != null) {
                 actionBar.setDisplayShowTitleEnabled(false);
             }
+            mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+            mToolbar.setNavigationOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
         }
     }
 
@@ -189,50 +187,10 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        mMenu = menu;
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add_news:
-                if (APP.isLogin()) {
-                    if (APP.getUser(this).id == null || APP.getUser(this).id.equals("0")) {
-                        RequestManager.getInstance().checkWithUserId("还没有完善信息，不能发动态哟！");
-                        mViewPager.setCurrentItem(3);
-//                        mBottomBar.setCurrentView(3);
-                        return super.onOptionsItemSelected(item);
-                    } else
-                        PostNewsActivity.startActivity(this);
-                } else {
-                    // Utils.toast(getApplicationContext(), "尚未登录");
-                    EventBus.getDefault().post(new LoginEvent());
-                }
-                break;
-        }
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void hiddenMenu() {
-        if (null != mMenu) {
-            for (int i = 0; i < mMenu.size(); i++) {
-                mMenu.getItem(i).setVisible(false);
-            }
-        }
-    }
-
-    private void showMenu() {
-        if (null != mMenu) {
-            for (int i = 0; i < mMenu.size(); i++) {
-                mMenu.getItem(i).setVisible(true);
-            }
-        }
-
-    }
 
     public TextView getToolbarTitle() {
         return mToolbarTitle;

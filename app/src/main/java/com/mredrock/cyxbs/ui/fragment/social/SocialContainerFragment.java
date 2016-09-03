@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.ui.fragment.social;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,13 +12,17 @@ import android.view.ViewGroup;
 
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
+import com.mredrock.cyxbs.event.AskLoginEvent;
 import com.mredrock.cyxbs.model.User;
 import com.mredrock.cyxbs.model.social.PersonInfo;
 import com.mredrock.cyxbs.network.RequestManager;
 import com.mredrock.cyxbs.subscriber.SimpleSubscriber;
 import com.mredrock.cyxbs.subscriber.SubscriberListener;
+import com.mredrock.cyxbs.ui.activity.social.PostNewsActivity;
 import com.mredrock.cyxbs.ui.adapter.TabPagerAdapter;
 import com.mredrock.cyxbs.ui.fragment.BaseFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +30,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 社区
@@ -36,6 +42,8 @@ public class SocialContainerFragment extends BaseFragment {
     TabLayout mTabLayout;
     @Bind(R.id.community_ViewPager)
     ViewPager mViewPager;
+    @Bind(R.id.fab_add)
+    FloatingActionButton mFabAdd;
     private boolean firstLogin = false;
     private int resumenCount = 0;
 
@@ -72,6 +80,14 @@ public class SocialContainerFragment extends BaseFragment {
         }
     }
 
+    @OnClick(R.id.fab_add)
+    public void onClickFabAdd() {
+        if (APP.isLogin()) {
+            PostNewsActivity.startActivity(getActivity());
+        } else {
+            EventBus.getDefault().post(new AskLoginEvent("还没有完善信息，不能发动态哟！"));
+        }
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
