@@ -21,6 +21,7 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.component.widget.NavigationBarMarginView;
+import com.mredrock.cyxbs.event.AskLoginEvent;
 import com.mredrock.cyxbs.event.LoginEvent;
 import com.mredrock.cyxbs.event.LoginStateChangeEvent;
 import com.mredrock.cyxbs.event.OnNavigationMenuSelectedItemChangeEvent;
@@ -131,7 +132,7 @@ public class MainActivity extends BaseActivity {
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), mFragments, titles);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(4);
-        refreshNavigationView();
+        refreshNavigationView(APP.isLogin());
     }
 
     @Override
@@ -165,7 +166,7 @@ public class MainActivity extends BaseActivity {
 //            mBottomBar.setCurrentView(0);
             mAdapter.notifyDataSetChanged();
         }
-        refreshNavigationHeader();
+        refreshNavigationHeader(event.getNewState());
     }
 
     private void initToolbar() {
@@ -247,8 +248,8 @@ public class MainActivity extends BaseActivity {
         return mViewPager.getCurrentItem();
     }
 
-    public void refreshNavigationView() {
-        refreshNavigationHeader();
+    public void refreshNavigationView(boolean isLogin) {
+        refreshNavigationHeader(isLogin);
         // add a item as margin for immersive
         if (NavigationBarMarginView.isNeedMargin(this)) {
             mNavigationView.getMenu().add("").setEnabled(false);
@@ -280,19 +281,19 @@ public class MainActivity extends BaseActivity {
                 setTitle(R.string.explore);
                 break;
             case R.id.item_relate_me:
-                startActivity(new Intent(this, AboutMeActivity.class));
+                checkLoginAndRun(() -> startActivity(new Intent(this, AboutMeActivity.class)), "登录后才能查看与我相关哦");
                 break;
             case R.id.item_my_trend:
-                startActivity(new Intent(this, MyTrendActivity.class));
+                checkLoginAndRun(() -> startActivity(new Intent(this, MyTrendActivity.class)), "登录后才能查看我的动态哦");
                 break;
             case R.id.item_no_course:
-                startActivity(new Intent(this, NoCourseActivity.class));
+                checkLoginAndRun(() -> startActivity(new Intent(this, NoCourseActivity.class)), "登录后才能使用没课约哦");
                 break;
             case R.id.item_empty_room:
                 startActivity(new Intent(this, EmptyRoomActivity.class));
                 break;
             case R.id.item_exam_and_grade:
-                startActivity(new Intent(this, ExamAndGradeActivity.class));
+                checkLoginAndRun(() -> startActivity(new Intent(this, ExamAndGradeActivity.class)), "登录后才能查看考试成绩哦");
                 break;
             case R.id.item_school_calendar:
                 startActivity(new Intent(this, SchoolCalendarActivity.class));
@@ -307,14 +308,14 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public void refreshNavigationHeader() {
+    public void refreshNavigationHeader(boolean isLogin) {
         View headView = mNavigationView.getHeaderView(0);
         CircularImageView avatarView = (CircularImageView) headView.findViewById(R.id.nh_avatar);
         CircularImageView avatarAlpha = (CircularImageView) headView.findViewById(R.id.nh_avatar_alpha);
         TextView nicknameView = (TextView) headView.findViewById(R.id.nh_nickname);
         TextView usernameView = (TextView) headView.findViewById(R.id.nh_username);
         TextView stuNumView = (TextView) headView.findViewById(R.id.nh_stu_num);
-        if (APP.isLogin()) {
+        if (isLogin) {
             User user = APP.getUser(this);
             ImageLoader.getInstance().loadAvatar(user.photo_thumbnail_src, avatarView);
             nicknameView.setText(user.nickname);
@@ -330,9 +331,17 @@ public class MainActivity extends BaseActivity {
             usernameView.setVisibility(View.GONE);
             stuNumView.setVisibility(View.GONE);
             headView.setOnClickListener(v -> EventBus.getDefault().post(new LoginEvent()));
-            headView.setBackgroundResource(R.drawable.bg_head_navigation_selectable);
+            headView.setBackgroundResource(R.drawable.bg_head_navigation_unlogin);
             avatarAlpha.setOnClickListener(null);
             avatarAlpha.setVisibility(View.GONE);
+        }
+    }
+
+    public void checkLoginAndRun(Runnable runnable, String messageWhenUnLogin) {
+        if (APP.isLogin()) {
+            runnable.run();
+        } else {
+            EventBus.getDefault().post(new AskLoginEvent(messageWhenUnLogin));
         }
     }
 

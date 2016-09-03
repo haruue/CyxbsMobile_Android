@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -20,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.config.Const;
+import com.mredrock.cyxbs.event.LoginStateChangeEvent;
 import com.mredrock.cyxbs.model.User;
 import com.mredrock.cyxbs.model.social.UploadImgResponse;
 import com.mredrock.cyxbs.network.RequestManager;
@@ -29,6 +31,8 @@ import com.mredrock.cyxbs.util.ImageLoader;
 import com.mredrock.cyxbs.util.permission.AfterPermissionGranted;
 import com.mredrock.cyxbs.util.permission.EasyPermissions;
 import com.yalantis.ucrop.UCrop;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.List;
@@ -69,6 +73,8 @@ public class EditInfoActivity extends BaseActivity implements EasyPermissions.Pe
     TextView editInfoPhone;
     @Bind(R.id.edit_info_phone_layout)
     RelativeLayout editInfoPhoneLayout;
+    @Bind(R.id.setting_exit_layout)
+    RelativeLayout settingExitLayout;
 
     private User mUser;
     private CharSequence[] dialogItems = {"拍照", "从相册中选择"};
@@ -134,6 +140,32 @@ public class EditInfoActivity extends BaseActivity implements EasyPermissions.Pe
         intent.putExtra(Const.Extras.EDIT_USER, mUser);
         startActivityForResult(intent, Const.Requests.EDIT_PHONE);
     }
+
+    @OnClick(R.id.setting_exit_layout)
+    void clickToExit() {
+        Handler handler = new Handler(getMainLooper());
+        handler.post(() -> new MaterialDialog.Builder(this)
+                .title("退出登录?")
+                .content("是否退出当前账号?")
+                .positiveText("退出")
+                .negativeText("取消")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        finish();
+                        APP.setUser(EditInfoActivity.this, null);
+                        EventBus.getDefault().post(new LoginStateChangeEvent(false));
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.dismiss();
+                    }
+                }).show());
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
