@@ -88,6 +88,9 @@
             android:layout_margin="5dp"
             android:textSize="13sp"/>
 
+        <com.mredrock.cyxbs.component.widget.NavigationBarMarginView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 </ScrollView>

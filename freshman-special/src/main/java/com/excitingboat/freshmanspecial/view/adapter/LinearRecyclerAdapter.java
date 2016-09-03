@@ -25,7 +25,7 @@ import java.util.List;
  * Created by PinkD on 2016/8/10.
  * StudentRecyclerAdapter
  */
-public class LinearRecyclerAdapter extends RecyclerView.Adapter<LinearRecyclerAdapter.ViewHolder> {
+public class LinearRecyclerAdapter extends NavigationBarMarginRecyclerAdapter<LinearRecyclerAdapter.ViewHolder> {
     private List<Video> data;
     private Context context;
     private ClipboardManager clipboardManager;
@@ -55,12 +55,12 @@ public class LinearRecyclerAdapter extends RecyclerView.Adapter<LinearRecyclerAd
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.project_freshman_special__item_cs_orign_cqupt, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindArrayViewHolder(ViewHolder holder, int position) {
         Glide.with(context)
                 .load(data.get(position).getPhoto().get(0).getPhoto_src())
                 .into(holder.roundRectImageView);
@@ -70,7 +70,7 @@ public class LinearRecyclerAdapter extends RecyclerView.Adapter<LinearRecyclerAd
     }
 
     @Override
-    public int getItemCount() {
+    public int getArrayItemCount() {
         return data.size();
     }
 

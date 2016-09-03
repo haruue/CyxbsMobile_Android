@@ -20,7 +20,7 @@ import java.util.List;
  * Created by PinkD on 2016/8/10.
  * StudentRecyclerAdapter
  */
-public class TeacherRecyclerAdapter extends RecyclerView.Adapter<TeacherRecyclerAdapter.ViewHolder> {
+public class TeacherRecyclerAdapter extends NavigationBarMarginRecyclerAdapter<TeacherRecyclerAdapter.ViewHolder> {
     private List<Teacher> data;
     private Context context;
     private OnItemClickListener onItemClickListener;
@@ -49,12 +49,12 @@ public class TeacherRecyclerAdapter extends RecyclerView.Adapter<TeacherRecycler
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.project_freshman_special__item_picture, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindArrayViewHolder(ViewHolder holder, int position) {
         Glide.with(context)
                 .load(data.get(position).getPhoto().get(0).getPhoto_thumbnail_src())
                 .into(holder.roundRectImageView);
@@ -63,7 +63,7 @@ public class TeacherRecyclerAdapter extends RecyclerView.Adapter<TeacherRecycler
     }
 
     @Override
-    public int getItemCount() {
+    public int getArrayItemCount() {
         return data.size();
     }
 

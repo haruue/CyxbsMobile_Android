@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by xushuzhan on 2016/8/15.
  */
-public class DailyLifeAdapter extends RecyclerView.Adapter<DailyLifeAdapter.MyViewHolder> {
+public class DailyLifeAdapter extends NavigationBarMarginRecyclerAdapter<DailyLifeAdapter.MyViewHolder> {
     private List<Place> data;
     private Fragment context;
     private Dialog dialog;
@@ -45,14 +45,14 @@ public class DailyLifeAdapter extends RecyclerView.Adapter<DailyLifeAdapter.MyVi
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_freshman_special__item_fg_daily_lify, parent, false);
 
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindArrayViewHolder(final MyViewHolder holder, int position) {
             holder.Adress.setText(data.get(position).getAddress());
             holder.Title.setText(data.get(position).getName());
 
@@ -79,7 +79,7 @@ public class DailyLifeAdapter extends RecyclerView.Adapter<DailyLifeAdapter.MyVi
     }
 
     @Override
-    public int getItemCount() {
+    public int getArrayItemCount() {
         return data.size();
     }
 

@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by xushuzhan on 2016/8/15.
  */
-public class AroundViewAdapter extends RecyclerView.Adapter<AroundViewAdapter.MyViewHolder> {
+public class AroundViewAdapter extends NavigationBarMarginRecyclerAdapter<AroundViewAdapter.MyViewHolder> {
     private static final String TAG = "AroundViewAdapter";
     private List<SurroundSight> data;
     private Fragment context;
@@ -48,13 +48,13 @@ public class AroundViewAdapter extends RecyclerView.Adapter<AroundViewAdapter.My
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_freshman_special__item_fg_around_view, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public void onBindArrayViewHolder(final MyViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: ");
         if(position==3||position==6){
             holder.more_a.setVisibility(View.INVISIBLE);
@@ -86,7 +86,7 @@ public class AroundViewAdapter extends RecyclerView.Adapter<AroundViewAdapter.My
     }
 
     @Override
-    public int getItemCount() {
+    public int getArrayItemCount() {
         return data.size();
     }
 

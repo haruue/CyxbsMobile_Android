@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by xushuzhan on 2016/8/15.
  */
-public class AroundFoodAdapter extends RecyclerView.Adapter<AroundFoodAdapter.MyViewHolder> {
+public class AroundFoodAdapter extends NavigationBarMarginRecyclerAdapter<AroundFoodAdapter.MyViewHolder> {
 
     private List<PlaceWithIntroduction> data;
 
@@ -46,14 +46,14 @@ public class AroundFoodAdapter extends RecyclerView.Adapter<AroundFoodAdapter.My
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateArrayViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_freshman_special__item_fg_around_food, parent, false);
 
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindArrayViewHolder(final MyViewHolder holder, int position) {
             Glide.with(context)
                     .load(data.get(position).getPhoto().get(0).getPhoto_src())
                     .into(holder.picture_af);
@@ -81,7 +81,7 @@ public class AroundFoodAdapter extends RecyclerView.Adapter<AroundFoodAdapter.My
     }
 
     @Override
-    public int getItemCount() {
+    public int getArrayItemCount() {
         return data.size();
     }
 

@@ -1,7 +1,3 @@
-## 取消沉浸式
-+ 哔哔叨叨详情
-+ 迎新网
-
 ## 适配 NavigationMargin
 + 与我相关
 + 我的动态
@@ -10,6 +6,7 @@
 + 校历
 + 关于
 + 地图
++ 新生网重邮风采的“学生代表”和“教师代表”，Grid 的 RecyclerView
 
 ## 适配 StatusbarMargin
 + 哔哔叨叨发布
