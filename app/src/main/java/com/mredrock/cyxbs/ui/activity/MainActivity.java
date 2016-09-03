@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.ui.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,14 @@ import com.mredrock.cyxbs.event.LoginStateChangeEvent;
 import com.mredrock.cyxbs.event.OnNavigationMenuSelectedItemChangeEvent;
 import com.mredrock.cyxbs.model.User;
 import com.mredrock.cyxbs.network.RequestManager;
+import com.mredrock.cyxbs.ui.activity.me.AboutActivity;
+import com.mredrock.cyxbs.ui.activity.me.AboutMeActivity;
+import com.mredrock.cyxbs.ui.activity.me.EditInfoActivity;
+import com.mredrock.cyxbs.ui.activity.me.EmptyRoomActivity;
+import com.mredrock.cyxbs.ui.activity.me.ExamAndGradeActivity;
+import com.mredrock.cyxbs.ui.activity.me.MyTrendActivity;
+import com.mredrock.cyxbs.ui.activity.me.NoCourseActivity;
+import com.mredrock.cyxbs.ui.activity.me.SchoolCalendarActivity;
 import com.mredrock.cyxbs.ui.activity.social.PostNewsActivity;
 import com.mredrock.cyxbs.ui.adapter.TabPagerAdapter;
 import com.mredrock.cyxbs.ui.fragment.BaseFragment;
@@ -271,21 +280,30 @@ public class MainActivity extends BaseActivity {
                 setTitle(R.string.explore);
                 break;
             case R.id.item_relate_me:
+                startActivity(new Intent(this, AboutMeActivity.class));
                 break;
             case R.id.item_my_trend:
+                startActivity(new Intent(this, MyTrendActivity.class));
                 break;
             case R.id.item_no_course:
+                startActivity(new Intent(this, NoCourseActivity.class));
                 break;
             case R.id.item_empty_room:
+                startActivity(new Intent(this, EmptyRoomActivity.class));
                 break;
             case R.id.item_exam_and_grade:
+                startActivity(new Intent(this, ExamAndGradeActivity.class));
                 break;
             case R.id.item_school_calendar:
+                startActivity(new Intent(this, SchoolCalendarActivity.class));
                 break;
             case R.id.item_feedback:
                 break;
             case R.id.item_about:
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
+            case R.id.item_account:
+                startActivity(new Intent(this, EditInfoActivity.class));
         }
     }
 
@@ -302,12 +320,14 @@ public class MainActivity extends BaseActivity {
             usernameView.setText(user.name);
             stuNumView.setText(user.stuNum);
             headView.setOnClickListener(null);
+            avatarView.setOnClickListener(v -> EventBus.getDefault().post(new OnNavigationMenuSelectedItemChangeEvent(R.id.item_account)));
         } else {
             avatarView.setImageResource(R.drawable.ic_default_avatar_with_bg_white);
             nicknameView.setText(R.string.check_me_to_login);
             usernameView.setVisibility(View.GONE);
             stuNumView.setVisibility(View.GONE);
             headView.setOnClickListener(v -> EventBus.getDefault().post(new LoginEvent()));
+            avatarView.setOnClickListener(null);
         }
     }
 

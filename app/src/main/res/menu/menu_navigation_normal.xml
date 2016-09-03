@@ -69,9 +69,15 @@
 
         <menu>
 
+            <item android:id="@+id/item_account"
+                  android:title="@string/account"
+                  android:checkable="false"
+                  android:visible="false"/>
+
             <item android:id="@+id/item_feedback"
                   android:title="@string/setting_feedback"
-                  android:checkable="false"/>
+                  android:checkable="false"
+                  android:visible="false"/>
 
             <item android:id="@+id/item_about"
                   android:title="@string/setting_about"

@@ -246,4 +246,5 @@
     <string name="check_me_to_login">点我登录</string>
     <string name="community_hot">动态</string>
     <string name="life">生活</string>
+    <string name="account">账户</string>
 </resources>
