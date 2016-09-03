@@ -1,10 +1,8 @@
 ## 适配 NavigationMargin
 + 空教室
-+ 地图
 + 新生网重邮风采的“学生代表”和“教师代表”，Grid 的 RecyclerView
 
 ## 适配 StatusbarMargin
-+ 地图
 
 ## 杂项
 + 替换 Toolbar ，使用 FAB 来显示 + ，统一 Material Design 返回图标

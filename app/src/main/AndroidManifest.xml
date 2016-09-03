@@ -69,7 +69,8 @@
             android:name=".ui.activity.explore.MapActivity"
             android:label="@string/map_activity_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
 
         <activity android:name=".ui.activity.me.EditInfoActivity" />
         <activity android:name=".ui.activity.me.AboutMeActivity" />
