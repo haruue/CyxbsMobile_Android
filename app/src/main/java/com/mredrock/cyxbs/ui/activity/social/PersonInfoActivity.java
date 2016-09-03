@@ -53,8 +53,10 @@ public class PersonInfoActivity extends BaseActivity implements SwipeRefreshLayo
     public static final String PERSON_NICKNAME = "userNickName";
     public static final String PERSON_USER_ID = "userId";
 
-    @Bind(R.id.mToolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
+    @Bind(R.id.toolbar_title)
+    TextView mToolbarTitle;
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @Bind(R.id.swipeRefreshLayout)
@@ -172,6 +174,7 @@ public class PersonInfoActivity extends BaseActivity implements SwipeRefreshLayo
     private void initToolbar() {
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
         mToolbar.setTitle("");
+        mToolbarTitle.setText("详细资料");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(view -> PersonInfoActivity.this.finish());
     }
