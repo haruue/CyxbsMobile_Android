@@ -1,14 +1,11 @@
 package com.mredrock.cyxbs.ui.fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,6 @@ import com.mredrock.cyxbs.ui.activity.MainActivity;
 import com.mredrock.cyxbs.ui.adapter.TabPagerAdapter;
 import com.mredrock.cyxbs.util.SPUtils;
 import com.mredrock.cyxbs.util.SchoolCalendar;
-import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,8 +36,6 @@ public class CourseContainerFragment extends BaseFragment {
     public static final String TAG = "CourseContainerFragment";
 
     public static final String SP_COLUMN_LAUNCH = "CourseContainerFragment_first_time_launch";
-
-    private boolean mIsFirstLaunch;
 
     @Bind(R.id.tab_course_tabs)
     TabLayout mTabs;
@@ -68,12 +62,6 @@ public class CourseContainerFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
-        getInfoFromSP();
-    }
-
-    private void getInfoFromSP() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-        mIsFirstLaunch = sp.getBoolean(SP_COLUMN_LAUNCH, true);
     }
 
     private void init() {
@@ -92,12 +80,6 @@ public class CourseContainerFragment extends BaseFragment {
                 mFragmentList.add(temp);
             }
         }
-    }
-
-    private void saveInfoToSP() {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-        editor.putBoolean(SP_COLUMN_LAUNCH, false);
-        editor.apply();
     }
 
     @Nullable
@@ -152,15 +134,18 @@ public class CourseContainerFragment extends BaseFragment {
             });
         }
         loadNowWeek();
-        remindFn(view);
+        remindFn(view.findViewById(R.id.container_snackbar));
     }
 
     private void remindFn(View view) {
-        if (APP.isLogin() && mIsFirstLaunch) {
-            Snackbar.make(view, "点击标题栏可以打开隐藏关卡", Snackbar.LENGTH_LONG).setAction("试试看", v -> {
-                view.postDelayed(() -> mToolbarTitle.performClick(), 300);
-                saveInfoToSP();
-            }).show();
+        if (APP.isLogin() && (Boolean) SPUtils.get(getActivity(), SP_COLUMN_LAUNCH, true)) {
+            Snackbar.make(view, "你知道吗？只需点击标题栏，即可更方便地切换星期。", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("试试看", v -> {
+                        view.postDelayed(() -> mToolbarTitle.performClick(), 300);
+                        SPUtils.set(getActivity(), SP_COLUMN_LAUNCH, false);
+                    })
+                    .setDuration(Snackbar.LENGTH_INDEFINITE)
+                    .show();
         }
     }
 
