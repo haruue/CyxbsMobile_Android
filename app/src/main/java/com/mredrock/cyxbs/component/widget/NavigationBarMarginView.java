@@ -22,14 +22,21 @@ public class NavigationBarMarginView extends View {
 
     public NavigationBarMarginView(Context context) {
         super(context);
+        initialize();
     }
 
     public NavigationBarMarginView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initialize();
     }
 
     public NavigationBarMarginView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initialize();
+    }
+
+    private void initialize() {
+        setFitsSystemWindows(false);
     }
 
     @Override

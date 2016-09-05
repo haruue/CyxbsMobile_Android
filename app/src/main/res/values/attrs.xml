@@ -80,7 +80,4 @@
         <attr name="color_normal" format="color" />
     </declare-styleable>
 
-    <declare-styleable name="StatusBarMarginView">
-        <attr name="in_navigation" format="boolean"/>
-    </declare-styleable>
 </resources>
