@@ -13,7 +13,7 @@
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme.FitsSystemWindow" parent="AppTheme.FitsSystemWindow.Base">
+    <style name="AppTheme.WindowTranslucent" parent="AppTheme.WindowTranslucent.Base">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
