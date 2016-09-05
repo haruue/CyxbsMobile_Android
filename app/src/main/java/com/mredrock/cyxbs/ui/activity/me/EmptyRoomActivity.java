@@ -212,6 +212,7 @@ public class EmptyRoomActivity extends BaseActivity
                                     mSuccessReqNum++;
                                     mConverter.setEmptyData(strings);
                                     if (mSuccessReqNum == mNeedReqNum) {
+                                        mEmptyRoomList.clear();
                                         updateEmptyAdapter();
                                     }
                                     emptyProgress.setVisibility(View.GONE);
