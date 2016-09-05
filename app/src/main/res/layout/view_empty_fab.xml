@@ -4,7 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="left"
-              android:padding="17dp"
+              android:paddingLeft="17dp"
+              android:paddingRight="17dp"
               android:background="@color/background_grey"
               android:orientation="vertical">
 
@@ -12,8 +13,8 @@
         android:id="@+id/empty_fab_sp_buildings"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
         android:gravity="center"
         android:spinnerMode="dialog"/>
 
