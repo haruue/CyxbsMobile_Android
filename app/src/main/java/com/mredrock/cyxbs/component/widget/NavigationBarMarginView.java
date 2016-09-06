@@ -6,8 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.jude.utils.JUtils;
-
-import static com.mredrock.cyxbs.util.UIUtils.hasSoftKeys;
+import com.mredrock.cyxbs.util.WindowTranslucentUtils;
 
 /**
  * 自适应的 Navigation Bar 空白 View ，请加入到 ScrollView 底端以及作为 RecyclerView 的最后一个 View
@@ -49,6 +48,8 @@ public class NavigationBarMarginView extends View {
     }
 
     public static boolean isNeedMargin(Context context) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && hasSoftKeys(context);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+                WindowTranslucentUtils.hasSoftKeys(context) &&
+                WindowTranslucentUtils.isScreenOrientationPortrait(context);
     }
 }
