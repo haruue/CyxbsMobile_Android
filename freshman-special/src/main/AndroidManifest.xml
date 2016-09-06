@@ -12,10 +12,14 @@
             android:name="com.excitingboat.freshmanspecial.utils.MyGlideModule"
             android:value="GlideModule" />
 
-        <activity android:name=".view.activity.FreshmanMainActivity"/>
-        <activity android:name=".view.activity.FreshmenGuideActivity" />
-        <activity android:name=".view.activity.FreshmenBigDataActivity" />
-        <activity android:name=".view.activity.FreshmenCQUPTStyleActivity" />
+        <activity android:name=".view.activity.FreshmanMainActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".view.activity.FreshmenGuideActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".view.activity.FreshmenBigDataActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".view.activity.FreshmenCQUPTStyleActivity"
+                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
