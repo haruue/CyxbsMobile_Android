@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
 
         mFragments = new ArrayList<>();
         //判断是否登陆
-        if (!APP.isLogin() || APP.isFresh()) {
+        if (!APP.isLogin()) {
             mFragments.add(unLoginFragment);
         } else {
             mFragments.add(courseContainerFragment);
@@ -151,7 +151,7 @@ public class MainActivity extends BaseActivity {
         super.onLoginStateChangeEvent(event);
         boolean isLogin = event.getNewState();
         Log.d(TAG, "onLoginStateChangeEvent: " + APP.isFresh());
-        if (!isLogin || APP.isFresh()) {
+        if (!isLogin) {
             mFragments.remove(0);
             mFragments.add(0, new UnLoginFragment());
             mAdapter.notifyDataSetChanged();
