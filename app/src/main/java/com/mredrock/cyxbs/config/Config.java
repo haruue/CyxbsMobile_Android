@@ -1,5 +1,7 @@
 package com.mredrock.cyxbs.config;
 
+import com.mredrock.cyxbs.BuildConfig;
+
 /**
  * Created by david on 15/4/12.
  */
@@ -18,4 +20,11 @@ public class Config {
     public final static String dataFilePath = android.os.Environment.getExternalStorageDirectory() +"/"+"Android/data/com.mredrock.cyxbs/";
     public final static String updateFilePath = android.os.Environment.getExternalStorageDirectory() +"/"+"download/";
     public final static String updateFilename = "com.mredrock.cyxbs.apk";
+
+
+
+    public static class MaterialSpecialVersion {
+        public final static int MATERIAL_SPECIAL_VERSION_CODE = BuildConfig.VERSION_CODE * 10000 + BuildConfig.MATERIAL_DESIGN_SUB_VERSION_CODE;
+    }
+
 }

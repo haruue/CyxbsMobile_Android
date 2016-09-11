@@ -12,6 +12,7 @@ android {
         targetSdkVersion 24
         versionCode 34
         versionName "小鲜肉版"
+        buildConfigField "int", "MATERIAL_DESIGN_SUB_VERSION_CODE", "1"
     }
 
     compileOptions {

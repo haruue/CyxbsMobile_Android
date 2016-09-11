@@ -29,6 +29,7 @@ import com.mredrock.cyxbs.network.func.UserCourseFilterFunc;
 import com.mredrock.cyxbs.network.func.UserInfoVerifyFunc;
 import com.mredrock.cyxbs.network.interceptor.StudentNumberInterceptor;
 import com.mredrock.cyxbs.network.observable.CourseListProvider;
+import com.mredrock.cyxbs.network.service.HaruueApiService;
 import com.mredrock.cyxbs.network.service.RedrockApiService;
 import com.mredrock.cyxbs.network.setting.CacheProviders;
 import com.mredrock.cyxbs.network.setting.QualifiedTypeConverterFactory;
@@ -73,6 +74,7 @@ public enum RequestManager {
     private RedrockApiService redrockApiService;
     private CacheProviders cacheProviders;
     private OkHttpClient okHttpClient;
+    private HaruueApiService haruueApiService;
 
     RequestManager() {
         okHttpClient = configureOkHttp(new OkHttpClient.Builder());
@@ -90,6 +92,7 @@ public enum RequestManager {
                 .using(CacheProviders.class);
 
         redrockApiService = retrofit.create(RedrockApiService.class);
+        haruueApiService = retrofit.create(HaruueApiService.class);
     }
 
     public static RequestManager getInstance() {
@@ -115,7 +118,7 @@ public enum RequestManager {
 
     public Subscription checkUpdate(Subscriber<UpdateInfo> subscriber, int versionCode) {
 
-        Observable<UpdateInfo> observable = redrockApiService.update()
+        Observable<UpdateInfo> observable = haruueApiService.update()
                 .map(new UpdateVerifyFunc(versionCode));
 
         return emitObservable(observable, subscriber);

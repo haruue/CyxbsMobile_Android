@@ -95,4 +95,11 @@ public class Const {
         public static final int BBDD = 5;
         public static final int NOTICE = 6;
     }
+
+
+
+    public static final class MaterialSpecialVersion {
+        public static final String HARUUE_API_BASE_URL = "https://api.caoyue.com.cn/";
+        public static final String API_UPDATE = "/cyxbs_material/cyxbsAppUpdate.xml";
+    }
 }
