@@ -54,8 +54,7 @@ public class UpdateUtil {
                                                   .cancelable(false)
                                                   .show();
 
-                                      }
-                                      if (shouldReturnResult) {
+                                      } else if (shouldReturnResult) {
                                           Utils.toast(context.getApplicationContext(), "已经是最新版了");
                                       }
                                   }

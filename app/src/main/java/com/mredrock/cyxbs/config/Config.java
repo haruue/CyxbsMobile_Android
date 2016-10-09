@@ -6,7 +6,6 @@ import com.mredrock.cyxbs.BuildConfig;
  * Created by david on 15/4/12.
  */
 public class Config {
-
     public static final String DIR = "/cyxbs";
     public static final String DIR_PHOTO = "/cyxbs/photo";
     public static final String DIR_FILE = "/cyxbs/file";
