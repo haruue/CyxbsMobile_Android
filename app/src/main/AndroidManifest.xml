@@ -17,6 +17,8 @@
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
 
     <application
         android:name=".APP"
@@ -24,11 +26,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.DayNight.NoActionBar">
-        <!--        魅族 3D TOUCH 适配-->
+
+        <!-- 魅族 3D TOUCH 适配 -->
         <meta-data
             android:name="android.3dtouch.launcher_menu"
             android:resource="@xml/launcher_menu"/>
-        <!--        魅族 3D TOUCH 适配-->
+        <!-- 魅族 3D TOUCH 适配 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="c85d4fb11d552c7112543bc0317d2da0"/>
@@ -47,10 +50,13 @@
 
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="@string/app_name">
-            <!--        魅族 3D TOUCH 适配-->
+            android:label="@string/app_name"
+            android:launchMode="singleTask">
+
             <intent-filter>
+                <!-- 魅族 3D TOUCH 适配 START -->
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
@@ -70,8 +76,8 @@
                     android:host="com.meizu.media.reader"
                     android:path="/date"
                     android:scheme="flyme_3dtouch"/>
+                <!-- 魅族 3D TOUCH 适配 END -->
             </intent-filter>
-            <!--        魅族 3D TOUCH 适配-->
         </activity>
         <activity
             android:name=".ui.activity.SplashActivity"
@@ -99,7 +105,6 @@
             android:label="@string/map_activity_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-
         <activity android:name=".ui.activity.me.EditInfoActivity"/>
         <activity android:name=".ui.activity.me.AboutMeActivity"/>
         <activity android:name=".ui.activity.me.MyTrendActivity"/>
@@ -135,6 +140,37 @@
             android:name=".service.UpdateService"
             android:enabled="true"
             android:exported="true"/>
+
+        <receiver android:name=".ui.widget.CourseListAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/course_list_app_widget_info"/>
+        </receiver>
+
+        <service
+            android:name=".ui.widget.CourseListRemoteViewsService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:process=":AppWidget"/>
+
+        <!-- 用于课表提醒 -->
+        <receiver
+            android:name=".receiver.RemindReceiver"
+          >
+        </receiver>
+
+        <activity android:name=".ui.activity.me.RemindActivity">
+        </activity>
+
+        <service
+            android:name=".ui.widget.CourseListAppWidgetUpdateService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>

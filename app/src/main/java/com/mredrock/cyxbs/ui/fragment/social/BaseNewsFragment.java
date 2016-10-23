@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.mredrock.cyxbs.APP;
@@ -117,7 +116,8 @@ public abstract class BaseNewsFragment extends BaseLazyFragment implements Swipe
     }
 
     private void getDataFailed(String reason) {
-        Toast.makeText(APP.getContext(), getString(R.string.erro), Toast.LENGTH_SHORT).show();
+        // TODO: this cause IllegalStateException, please check life cycle first
+//        Toast.makeText(APP.getContext(), getString(R.string.erro), Toast.LENGTH_SHORT).show();
         Log.e(TAG, reason);
 
     }
@@ -160,6 +160,7 @@ public abstract class BaseNewsFragment extends BaseLazyFragment implements Swipe
 
 
     private void initAdapter(List<HotNews> listHotNews) {
+        if (mRecyclerView == null) return;  // prevent it be called before lazy loading
         mListHotNews = listHotNews;
         mNewsAdapter = new NewsAdapter(mListHotNews) {
             @Override
