@@ -169,7 +169,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             mSubscription = RxBus.getDefault()
                     .toObserverable(HotNewsContent.class)
                     .subscribe(hotNewsContent -> {
-                        setData(hotNewsContent, false);
+//                        setData(hotNewsContent, false);
                         unregisterObservable();
                     }, throwable -> {
                         unregisterObservable();
@@ -186,10 +186,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             RequestManager.getInstance().addThumbsUp(new SimpleSubscriber<>(textView.getContext()
                     , new SubscriberListener<String>() {
                 @Override
-                public void onError(Throwable e) {
+                public boolean onError(Throwable e) {
                     super.onError(e);
                     LogUtils.LOGE(TAG, "like", e);
                     //disLikeToSetDataAndView(textView);
+                    return false;
                 }
 
                 @Override
@@ -203,7 +204,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                     likeToSetDataAndView(textView,likeNumber);
 
 
-                    if (isSingle) RxBus.getDefault().post(mHotNewsContent);
+//                    if (isSingle) RxBus.getDefault().post(mHotNewsContent);
+                    if (isSingle) setData(mHotNewsContent, false);
                 }
 
                 @Override
@@ -221,10 +223,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             RequestManager.getInstance().cancelThumbsUp(new SimpleSubscriber<>(textView.getContext()
                     , new SubscriberListener<String>() {
                 @Override
-                public void onError(Throwable e) {
+                public boolean onError(Throwable e) {
                     super.onError(e);
                     Log.e(TAG, e.toString());
                    // likeToSetDataAndView(textView);
+                    return false;
                 }
 
                 @Override
@@ -236,7 +239,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                     EventBus.getDefault().post(new ItemChangedEvent(likeNumber,
                             mHotNewsContent.articleId,false));
                     disLikeToSetDataAndView(textView,likeNumber);
-                    if (isSingle) RxBus.getDefault().post(mHotNewsContent);
+//                    if (isSingle) RxBus.getDefault().post(mHotNewsContent);
+                    if (isSingle) setData(mHotNewsContent, false);
                 }
 
                         @Override
@@ -279,7 +283,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             mAutoNineGridlayout.setVisibility(View.GONE);
             mImageView.setVisibility(View.VISIBLE);
             ImageLoader.getInstance().loadOffcialImg(getImageList(getUrls(mHotNewsContent.img.smallImg)).get(0).url, mImageView, itemView);
-            mImageView.setOnClickListener(view -> ImageActivity.startWithData(itemView.getContext(), mHotNewsContent, 0));
+            mImageView.setOnClickListener(view -> ImageActivity.startWithData(itemView.getContext(), mHotNewsContent, 0));//恩，这里是点击图片放大的逻辑
         }
 
         private void showNineLayout() {

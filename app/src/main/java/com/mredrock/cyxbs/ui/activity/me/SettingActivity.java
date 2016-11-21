@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.event.LoginStateChangeEvent;
+import com.mredrock.cyxbs.network.func.AppWidgetCacheAndUpdateFunc;
 import com.mredrock.cyxbs.ui.activity.BaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,6 +81,7 @@ public class SettingActivity extends BaseActivity {
                         super.onPositive(dialog);
                         finish();
                         APP.setUser(SettingActivity.this, null);
+                        AppWidgetCacheAndUpdateFunc.deleteCache();
                         EventBus.getDefault().post(new LoginStateChangeEvent(false));
                     }
 
@@ -108,6 +110,6 @@ public class SettingActivity extends BaseActivity {
     @OnClick(R.id.setting_share_layout)
     public void onClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(R.layout.dialog_share).create().show();
+        builder.setView(R.layout.dialog_share).show();
     }
 }

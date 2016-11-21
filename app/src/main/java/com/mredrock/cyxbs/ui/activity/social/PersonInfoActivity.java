@@ -98,6 +98,7 @@ public class PersonInfoActivity extends BaseActivity implements SwipeRefreshLayo
                 ContextCompat.getColor(APP.getContext(), R.color.colorPrimary));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mHeaderViewWrapper.setData(mUserAvatar, mNickName);
+
         requestData();
     }
 
@@ -120,10 +121,11 @@ public class PersonInfoActivity extends BaseActivity implements SwipeRefreshLayo
 
         RequestManager.getInstance().getPersonLatestList(new SimpleSubscriber<>(this, new SubscriberListener<List<HotNews>>() {
             @Override
-            public void onError(Throwable e) {
+            public boolean onError(Throwable e) {
                 super.onError(e);
                 closeLoading();
                 getDataFailed(e.toString());
+                return true;
             }
 
             @Override
@@ -222,6 +224,7 @@ public class PersonInfoActivity extends BaseActivity implements SwipeRefreshLayo
 
         public void setData(String avatar, String nickname) {
             ImageLoader.getInstance().loadAvatar(avatar, mCircleImageView);
+            mCircleImageView.setOnClickListener(view -> ImageActivity.startWithData(PersonInfoActivity.this, avatar));
             mTextNickName.setText(nickname);
         }
 

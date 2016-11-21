@@ -1,15 +1,16 @@
 package com.mredrock.cyxbs;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 
-import com.excitingboat.freshmanspecial.App;
 import com.google.gson.Gson;
 import com.mredrock.cyxbs.config.Const;
 import com.mredrock.cyxbs.model.Course;
 import com.mredrock.cyxbs.model.User;
 import com.mredrock.cyxbs.network.RequestManager;
+import com.mredrock.cyxbs.network.encrypt.UserInfoEncryption;
 import com.mredrock.cyxbs.util.SPUtils;
 import com.orhanobut.logger.Logger;
 
@@ -23,7 +24,7 @@ import rx.Subscriber;
 /**
  * Created by cc on 16/3/18.
  */
-public class APP extends Application {
+public class APP extends MultiDexApplication {
     private static Context context;
     private static User mUser;
     private static boolean login;
@@ -33,6 +34,8 @@ public class APP extends Application {
     public static Context getContext() {
         return context;
     }
+
+    private static UserInfoEncryption userInfoEncryption;
 
     // TODO: isLogin getUser setUser 使用的位置,逻辑
 
@@ -46,7 +49,8 @@ public class APP extends Application {
             userJson = new Gson().toJson(user);
             APP.setLogin(true);
         }
-        SPUtils.set(context, Const.SP_KEY_USER, userJson);
+        String encryptedJson = userInfoEncryption.encrypt(userJson);
+        SPUtils.set(context, Const.SP_KEY_USER, encryptedJson);
     }
 
     /**
@@ -55,7 +59,9 @@ public class APP extends Application {
      */
     public static User getUser(Context context) {
         if (mUser == null) {
-            String json = (String) SPUtils.get(context, Const.SP_KEY_USER, "");
+            String encryptedJson = (String) SPUtils.get(context, Const.SP_KEY_USER, "");
+            String json = userInfoEncryption.decrypt(encryptedJson);
+            Log.d("userinfo", json);
             mUser = new Gson().fromJson(json, User.class);
 
             if (mUser == null || mUser.stuNum == null || mUser.idNum == null) {
@@ -67,7 +73,8 @@ public class APP extends Application {
 
     public static boolean isLogin() {
         if (!login) {
-            String json = (String) SPUtils.get(context, Const.SP_KEY_USER, "");
+            String encryptedJson = (String) SPUtils.get(context, Const.SP_KEY_USER, "");
+            String json = userInfoEncryption.decrypt(encryptedJson);
             User user = new Gson().fromJson(json, User.class);
             if (user != null && !user.stuNum.equals("0")) {
                 return true;
@@ -110,8 +117,8 @@ public class APP extends Application {
         initThemeMode();
         //  FIR.init(this);
         Logger.init("cyxbs_mobile");
-        // Initialize FreshSpecial As library
-        App.initializeLibrary(getContext());
+        // Initialize UserInfoEncrypted
+        userInfoEncryption = new UserInfoEncryption();
         // Refresh Course List When Start
         reloadCourseList();
     }
@@ -124,7 +131,9 @@ public class APP extends Application {
                                                            public void onCompleted() {}
 
                                                            @Override
-                                                           public void onError(Throwable e) {}
+                                                           public void onError(Throwable e) {
+                                                               Log.e("CSET", "reloadCourseList", e);
+                                                           }
 
                                                            @Override
                                                            public void onNext(List<Course> courses) {}

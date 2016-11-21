@@ -4,21 +4,33 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.model.Course;
+import com.mredrock.cyxbs.ui.activity.LoginActivity;
 import com.mredrock.cyxbs.util.DensityUtils;
+import com.mredrock.cyxbs.util.LogUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static android.R.attr.x;
+import static android.R.attr.y;
 
 public class ScheduleView extends FrameLayout {
 
@@ -26,7 +38,18 @@ public class ScheduleView extends FrameLayout {
     private int height = (int) DensityUtils.dp2px(getContext(), 100);
     private CourseColorSelector colorSelector = new CourseColorSelector();
     public CourseList[][] course = new CourseList[7][7];
+
     private Context context;
+    private ImageView mClickImageView;
+    private int startX, startY, endX, endY;
+
+
+    private OnImageViewClickListener onImageViewClickListener;
+
+
+    public interface OnImageViewClickListener {
+        void onClick(int x, int y);
+    }
 
     public ScheduleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -48,7 +71,8 @@ public class ScheduleView extends FrameLayout {
 
     private void initCourse() {
         for (int i = 0; i < 7; i++) {
-            course[i] = new CourseList[7];
+            if (course[i] == null)
+                course[i] = new CourseList[7];
         }
     }
 
@@ -65,20 +89,37 @@ public class ScheduleView extends FrameLayout {
                     course[x][y] = new CourseList();
                 }
                 course[x][y].list.add(aData);
+                Collections.sort(course[x][y].list, ((course1, t1) ->
+                        course1.getCourseType() - t1.getCourseType()
+                ));
             }
         }
         loadingContent();
     }
 
+    public void setOnImageViewClickListener(OnImageViewClickListener onImageViewClickListener) {
+        this.onImageViewClickListener = onImageViewClickListener;
+    }
+
     private void loadingContent() {
         for (int x = 0; x < 7; x++) {
             for (int y = 0; y < 7; y++) {
-                if (course[x][y] != null) {
+                if (course[x][y] != null && course[x][y].list != null && course[x][y].list.size() != 0) {
                     createLessonText(course[x][y]);
                 }
             }
         }
         addAnchorView();
+    }
+
+    public void clearList() {
+        for (int i = 0; i < course.length; i++) {
+            for (int j = 0; j < course[0].length; j++) {
+                if (course[i][j] != null && course[i][j].list != null)
+                    course[i][j].list.clear();
+            }
+        }
+
     }
 
     private void addAnchorView() {
@@ -108,7 +149,7 @@ public class ScheduleView extends FrameLayout {
         tv.setTextColor(Color.WHITE);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         tv.setGravity(Gravity.CENTER);
-        tv.setText(course.course + "@" + course.classroom);
+        tv.setText(course.getCourseType() == 1 ? course.toCourseString() : course.course);
 
         GradientDrawable gd = new GradientDrawable();
         gd.setCornerRadius(DensityUtils.dp2px(getContext(), 1));
@@ -131,6 +172,53 @@ public class ScheduleView extends FrameLayout {
     public static class CourseList {
         public ArrayList<Course> list = new ArrayList<>();
     }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            startX = (int) event.getX();
+            startY = (int) event.getY();
+        }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            endX = (int) event.getX();
+            endY = (int) event.getY();
+        }
+        int distance = (int) Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2));
+        if (distance <= 1) {
+            int x = (int) (event.getX() / getWidth() * 7);
+            int y = (int) (event.getY() / getHeight() * 12);
+            if (mClickImageView == null) {
+                mClickImageView = new ImageView(context);
+                mClickImageView.setImageDrawable(this.getContext().getResources().getDrawable(R.drawable.ic_add_circle));
+                mClickImageView.setBackgroundColor(Color.parseColor("#60000000"));
+                mClickImageView.setScaleType(ImageView.ScaleType.CENTER);
+                mClickImageView.setOnLongClickListener((view -> {
+                    removeView(mClickImageView);
+                    return true;
+                }));
+
+            }
+            if (onImageViewClickListener != null) {
+                mClickImageView.setOnClickListener((view -> onImageViewClickListener.onClick(x, y)));
+            }
+            int mTop = height * y / 2;
+            int mLeft = width * x;
+            int mWidth = width;
+            int mHeight = (int) (height * (float) 1 / 2);
+            LayoutParams flParams = new LayoutParams((mWidth - DensityUtils.dp2px(getContext(), 1f)), (mHeight - DensityUtils.dp2px(getContext(), 1f)));
+            flParams.topMargin = (mTop + DensityUtils.dp2px(getContext(), 1f));
+            flParams.leftMargin = (mLeft + DensityUtils.dp2px(getContext(), 1f));
+            mClickImageView.setLayoutParams(flParams);
+            removeView(mClickImageView);
+            addView(mClickImageView);
+        }
+
+
+        return true;
+
+    }
+
 
     public static class CourseColorSelector {
         private int[] colors = new int[]{
@@ -169,4 +257,6 @@ public class ScheduleView extends FrameLayout {
             return mCourseColorMap.get(name);
         }
     }
+
+
 }

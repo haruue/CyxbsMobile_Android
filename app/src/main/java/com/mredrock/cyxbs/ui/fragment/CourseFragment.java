@@ -1,5 +1,6 @@
 package com.mredrock.cyxbs.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -13,24 +14,42 @@ import android.widget.TextView;
 
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
+import com.mredrock.cyxbs.component.widget.Position;
 import com.mredrock.cyxbs.component.widget.ScheduleView;
+import com.mredrock.cyxbs.event.AffairAddEvent;
+import com.mredrock.cyxbs.event.AffairDeleteEvent;
+import com.mredrock.cyxbs.model.Affair;
 import com.mredrock.cyxbs.model.Course;
 import com.mredrock.cyxbs.model.User;
 import com.mredrock.cyxbs.network.RequestManager;
 import com.mredrock.cyxbs.subscriber.SimpleSubscriber;
 import com.mredrock.cyxbs.subscriber.SubscriberListener;
+import com.mredrock.cyxbs.ui.activity.affair.EditAffairActivity;
+import com.mredrock.cyxbs.ui.widget.CourseListAppWidgetUpdateService;
 import com.mredrock.cyxbs.util.DensityUtils;
+import com.mredrock.cyxbs.util.LogUtils;
 import com.mredrock.cyxbs.util.SchoolCalendar;
+import com.mredrock.cyxbs.util.database.DBManager;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 
 public class CourseFragment extends BaseFragment {
 
     public static final String BUNDLE_KEY = "WEEK_NUM";
+
 
     private int[] mTodayWeekIds = {
             R.id.view_course_today_7,
@@ -60,6 +79,9 @@ public class CourseFragment extends BaseFragment {
     @Bind(R.id.course_month)
     TextView mCourseMonth;
 
+    private List<Course> courseList = new ArrayList<>();
+    private List<Course> affairList = new ArrayList<>();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +107,15 @@ public class CourseFragment extends BaseFragment {
             mCourseTime.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(getContext(), 40), screeHeight));
             mCourseScheduleContent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screeHeight));
         }
+        Intent intent = new Intent(getActivity(), EditAffairActivity.class);
+        mCourseScheduleContent.setOnImageViewClickListener((x,y)->{
+            int day = x;
+            int lesson = y / 2;
+            Position position = new Position(day , lesson);
+            intent.putExtra(EditAffairActivity.BUNDLE_KEY,position);
+            intent.putExtra(EditAffairActivity.WEEK_NUMBER,mWeek);
+            startActivity(intent);
+        });
 
         if (mWeek != 0) mCourseMonth.setText(month);
         int today = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) + 5) % 7;
@@ -164,6 +195,7 @@ public class CourseFragment extends BaseFragment {
             if (mUser != null) {
                 RequestManager.getInstance()
                         .getCourseList(new SimpleSubscriber<>(getActivity(), false, false, new SubscriberListener<List<Course>>() {
+
                             @Override
                             public void onStart() {
                                 super.onStart();
@@ -173,26 +205,107 @@ public class CourseFragment extends BaseFragment {
                             @Override
                             public void onNext(List<Course> courses) {
                                 super.onNext(courses);
-                                if (mCourseScheduleContent != null) {
-                                    mCourseScheduleContent.addContentView(courses);
-                                }
+                                courseList.clear();
+                                courseList.addAll(courses);
+
                             }
 
                             @Override
-                            public void onError(Throwable e) {
+                            public boolean onError(Throwable e) {
                                 super.onError(e);
                                 hideRefreshLoading();
+                                return false;
                             }
 
                             @Override
                             public void onCompleted() {
                                 super.onCompleted();
+                                loadAffair(week);
                                 hideRefreshLoading();
                             }
                         }), mUser.stuNum, mUser.idNum, week, update);
             }
         }
     }
+
+
+    private void loadAffair(int mWeek){
+        DBManager dbManager = DBManager.INSTANCE;
+        dbManager.query(mUser.stuNum,mWeek)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleSubscriber<List<Course>>(getActivity(), false, false, new SubscriberListener<List<Course>>() {
+                    @Override
+                    public void onNext(List<Course> affairs) {
+                        super.onNext(affairs);
+                        if (mCourseScheduleContent != null) {
+                            affairList.clear();
+                            mCourseScheduleContent.clearList();
+                            affairList.addAll(affairs);
+                            affairList.addAll(courseList);
+                            mCourseScheduleContent.addContentView(affairList);
+                            Observable<List<Course>> observable = Observable.create(new Observable.OnSubscribe<List<Course>>() {
+                                @Override
+                                public void call(Subscriber<? super List<Course>> subscriber) {
+                                    subscriber.onNext(affairList);
+                                }
+                            });
+                            observable.map(courses -> {
+                                CourseListAppWidgetUpdateService.start(getActivity(), false);
+                                return courses;
+                            }).subscribe();
+                        }
+                    }
+                }));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAffairDeleteEvent(AffairDeleteEvent event) {
+        if (mWeek == 0||event.getCourse().week.contains(mWeek)){
+            Affair affair = (Affair) event.getCourse();
+            DBManager.INSTANCE.deleteAffair(affair.uid)
+                    .observeOn(Schedulers.io())
+                    .unsubscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SimpleSubscriber(getActivity(), new SubscriberListener() {
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                            LogUtils.LOGE("onAffairDeleteEvent","onAffairDeleteEvent");
+                            loadAffair(mWeek);
+                        }
+
+                        @Override
+                        public boolean onError(Throwable e) {
+                            return super.onError(e);
+                        }
+
+                        @Override
+                        public void onNext(Object o) {
+                            super.onNext(o);
+                        }
+
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                        }
+                    }));
+        }
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAffairAddEvent(AffairAddEvent event){
+        if (mWeek == 0 || event.getCourse().week.contains(mWeek)){
+            LogUtils.LOGE("onAffairAddEvent","loadCourse(mWeek,false);");
+            loadAffair(mWeek);
+        }
+
+    }
+
+
 
     private void hideRefreshLoading() {
         if (mCourseSwipeRefreshLayout != null) {
