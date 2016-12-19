@@ -10,10 +10,12 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.config.Const;
 import com.mredrock.cyxbs.util.UpdateUtil;
 import com.mredrock.cyxbs.util.Utils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,11 +32,23 @@ public class AboutActivity extends AppCompatActivity {
     @Bind(R.id.toolbar)
     Toolbar  toolbar;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 
     @OnClick(R.id.about_website)
     void clickToWebsite() {
        // WebViewUtils.showPortalWebView(this, Const.APP_HOME);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Const.APP_HOME));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Const.APP_WEBSITE));
         startActivity(intent);
     }
 
@@ -57,6 +71,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        StatusBarUtil.setTranslucent(this, 50);
         ButterKnife.bind(this);
         initializeToolbar();
         aboutVersion.setText(new StringBuilder("Version ").append(Utils.getAppVersionName(this)));
@@ -65,6 +80,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void initializeToolbar() {
         if (toolbar != null) {
             toolbar.setTitle("");
+            toolbar.setNavigationIcon(R.drawable.back);
             toolbarTitle.setText("关于");
             setSupportActionBar(toolbar);
             toolbar.setNavigationOnClickListener(

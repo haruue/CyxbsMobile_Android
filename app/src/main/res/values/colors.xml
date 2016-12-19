@@ -9,10 +9,10 @@
     <color name="data_light_black">#a9a9a9</color>
 
     <!--Common-->
-    <color name="colorPrimary">#00aae8</color>
-    <color name="colorPrimaryDark">#0088ba</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
     <!--<color name="colorPrimaryDark">#ffffff</color>-->
-    <color name="colorAccent">#f76060</color>
+    <color name="colorAccent">#0cb2f9</color>
     <color name="tabIndicatorColor">#c9c9c9</color>
     <color name="tab_background_pressed">#1Affffff</color>
     <color name="tabText">#66000000</color>
@@ -82,5 +82,9 @@
     <color name="transparent">#00000000</color>
     <color name="tc_app_widget_course_list_item_order">#74797d</color>
     <color name="bg_app_widget">#d9d7dee4</color>
+
+    <color name="color_course_morning">#5bcdf2</color>
+    <color name="color_course_afternoon">#f9af58</color>
+    <color name="color_course_night">#6fd1ba</color>
 
 </resources>

@@ -1,33 +1,57 @@
 package com.mredrock.cyxbs.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.jaeger.library.StatusBarUtil;
+import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.service.NotificationService;
+import com.umeng.analytics.MobclickAgent;
 
-import static com.mredrock.cyxbs.ui.fragment.me.RemindFragment.SP_REMIND_EVERY_CLASS;
-import static com.mredrock.cyxbs.ui.fragment.me.RemindFragment.SP_REMIND_EVERY_DAY;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class SplashActivity extends Activity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class SplashActivity extends AppCompatActivity {
+
+    @Bind(R.id.iv_splash)
+    ImageView mIvSplash;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (!APP.isLogin() || APP.getUser(this) == null) {
-//            startActivity(new Intent(this, LoginActivity.class));
-//        } else {
-        startActivity(new Intent(this, MainActivity.class));
-//        }
+        setContentView(R.layout.activity_splash);
+        ButterKnife.bind(this);
+        StatusBarUtil.setTranslucent(this, 50);
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                SplashActivity.this.finish();
+            }
+        }, 1000);
+
+        Glide.with(this).load(R.drawable.splash).into(mIvSplash);
 
         //启动用于课前提醒的服务
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sp.getBoolean(SP_REMIND_EVERY_CLASS, false) || sp.getBoolean(SP_REMIND_EVERY_DAY, false)) {
-            Intent service = new Intent(this, NotificationService.class);
-            startService(service);
-        }
-        this.finish();
+        NotificationService.startNotificationService(this);
     }
 }

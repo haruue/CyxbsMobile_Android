@@ -7,7 +7,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -15,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.component.widget.recycler.DividerItemDecoration;
@@ -27,6 +27,7 @@ import com.mredrock.cyxbs.ui.activity.BaseActivity;
 import com.mredrock.cyxbs.ui.adapter.me.NoCourseAdapter;
 import com.mredrock.cyxbs.ui.fragment.me.NoCourseItemFragment;
 import com.mredrock.cyxbs.util.NetUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -70,10 +71,24 @@ public class NoCourseActivity extends BaseActivity
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_no_course);
         ButterKnife.bind(this);
+        StatusBarUtil.setTranslucent(this, 50);
         initToolbar();
         init();
     }
@@ -102,14 +117,11 @@ public class NoCourseActivity extends BaseActivity
         noCourseRecyclerView.setAdapter(mNoCourseAdapter);
 
         noCourseStu.setOnEditorActionListener(
-                new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                (v, actionId, event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-                        }
-                        return true;
                     }
+                    return true;
                 });
     }
 
@@ -118,6 +130,7 @@ public class NoCourseActivity extends BaseActivity
             toolbar.setTitle("");
             toolbarTitle.setText("没课约");
             setSupportActionBar(toolbar);
+            toolbar.setNavigationIcon(R.drawable.back);
             toolbar.setNavigationOnClickListener(v -> NoCourseActivity.this.finish());
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {

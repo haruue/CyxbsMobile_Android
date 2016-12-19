@@ -121,6 +121,8 @@
     <string name="setting_news_remind">新消息提醒</string>
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_about">关于</string>
+    <string name="setting_show_mode">在课表上没课的地方显示备忘内容</string>
+
     <string name="setting_exit">退出当前账号</string>
 
     <string name="grade_title_name">名称</string>
@@ -252,5 +254,6 @@
 
     <string name="add_affair_edit_hint">写点内容哦</string>
     <string name="add_affair_edit_title">给你的提醒设置一个标题吧</string>
+    <string name="send">发送</string>
 
 </resources>

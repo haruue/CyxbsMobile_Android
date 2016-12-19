@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.network.service;
 
 import com.mredrock.cyxbs.config.Const;
 import com.mredrock.cyxbs.model.AboutMe;
+import com.mredrock.cyxbs.model.AffairApi;
 import com.mredrock.cyxbs.model.Course;
 import com.mredrock.cyxbs.model.Empty;
 import com.mredrock.cyxbs.model.Exam;
@@ -14,7 +15,6 @@ import com.mredrock.cyxbs.model.Shake;
 import com.mredrock.cyxbs.model.Student;
 import com.mredrock.cyxbs.model.UpdateInfo;
 import com.mredrock.cyxbs.model.User;
-import com.mredrock.cyxbs.model.AffairApi;
 import com.mredrock.cyxbs.model.social.BBDDDetail;
 import com.mredrock.cyxbs.model.social.BBDDNews;
 import com.mredrock.cyxbs.model.social.Comment;
@@ -259,5 +259,21 @@ public interface RedrockApiService {
     @FormUrlEncoded
     @POST(Const.API_GET_AFFAIR)
     Observable<AffairApi<List<AffairApi.AffairItem>>> getAffair(@Field("stuNum") String stuNum, @Field("idNum") String idNum);
+
+    @FormUrlEncoded
+    @POST(Const.API_ADD_AFFAIR)
+    Observable<RedrockApiWrapper<Object>> addAffair(@Field("id")String id, @Field("stuNum") String stuNum, @Field("idNum") String idNum,
+                                            @Field("date") String date, @Field("time")int time,@Field("title")String title,
+                                            @Field("content")String content);
+
+    @FormUrlEncoded
+    @POST(Const.API_EDIT_AFFAIR)
+    Observable<RedrockApiWrapper<Object>> editAffair(@Field("id")String id, @Field("stuNum") String stuNum, @Field("idNum") String idNum,
+                                            @Field("date") String date, @Field("time")int time,@Field("title")String title,
+                                            @Field("content")String content);
+
+    @FormUrlEncoded
+    @POST(Const.API_DELETE_AFFAIR)
+    Observable<RedrockApiWrapper<Object>> deleteAffair(@Field("stuNum") String stuNum, @Field("idNum") String idNum, @Field("id") String id);
 
 }

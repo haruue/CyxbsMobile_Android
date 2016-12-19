@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.component.widget.recycler.DividerItemDecoration;
@@ -42,6 +43,7 @@ import com.mredrock.cyxbs.util.RxBus;
 import com.mredrock.cyxbs.util.Utils;
 import com.mredrock.cyxbs.util.download.DownloadHelper;
 import com.mredrock.cyxbs.util.download.callback.OnDownloadListener;
+import com.umeng.analytics.MobclickAgent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -93,6 +95,13 @@ public class SpecificNewsActivity extends BaseActivity implements SwipeRefreshLa
 
     private User mUser;
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+
     public static void startActivityWithDataBean(Context context, HotNewsContent hotNewsContent, String articleId, boolean isFromPersonInfo, boolean isFromMyTrend) {
         Intent intent = new Intent(context, SpecificNewsActivity.class);
         intent.putExtra(START_DATA, hotNewsContent);
@@ -115,7 +124,8 @@ public class SpecificNewsActivity extends BaseActivity implements SwipeRefreshLa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specific_news);
         ButterKnife.bind(this);
-      //  mUser = APP.getUser(this);
+        StatusBarUtil.setTranslucent(this, 50);
+        //  mUser = APP.getUser(this);
         mRefresh.setColorSchemeColors(
                 ContextCompat.getColor(APP.getContext(), R.color.colorAccent),
                 ContextCompat.getColor(APP.getContext(), R.color.colorPrimary)
@@ -272,7 +282,7 @@ public class SpecificNewsActivity extends BaseActivity implements SwipeRefreshLa
     }
 
     private void initToolbar() {
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
+        mToolbar.setNavigationIcon(R.drawable.back);
         mToolbar.setTitle("");
         mToolBarTitle.setText(getString(R.string.specific_news_title));
         setSupportActionBar(mToolbar);
@@ -288,7 +298,7 @@ public class SpecificNewsActivity extends BaseActivity implements SwipeRefreshLa
         if (mNewsEdtComment.getText().toString().equals(""))
             Toast.makeText(SpecificNewsActivity.this, getString(R.string.alter), Toast.LENGTH_SHORT).show();
         else {
-            RequestManager.getInstance().postReMarks(new SimpleSubscriber<>(this, new SubscriberListener<String>() {
+            RequestManager.getInstance().postReMarks(new SimpleSubscriber<>(this,true,false, new SubscriberListener<String>() {
                 @Override
                 public void onCompleted() {
                     super.onCompleted();
@@ -346,9 +356,9 @@ public class SpecificNewsActivity extends BaseActivity implements SwipeRefreshLa
 
     @Override
     public void onBackPressed() {
-        if (mNewsEdtComment.getText().toString().isEmpty()){
+        if (mNewsEdtComment.getText().toString().isEmpty()) {
             super.onBackPressed();
-        }else {
+        } else {
             Handler handler = new Handler(getMainLooper());
             handler.post(() -> new MaterialDialog.Builder(this)
                     .title("退出编辑?")
@@ -375,6 +385,8 @@ public class SpecificNewsActivity extends BaseActivity implements SwipeRefreshLa
     protected void onResume() {
         super.onResume();
         mUser = APP.getUser(this);
+
+        MobclickAgent.onResume(this);
     }
 
     @Override

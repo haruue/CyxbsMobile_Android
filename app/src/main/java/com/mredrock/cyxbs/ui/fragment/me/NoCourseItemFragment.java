@@ -65,11 +65,9 @@ public class NoCourseItemFragment extends BaseFragment {
             R.id.view_no_course_today_3, R.id.view_no_course_today_4,
             R.id.view_no_course_today_5, R.id.view_no_course_today_6};
 
-
     public NoCourseItemFragment() {
 
     }
-
 
     public static NoCourseItemFragment newInstance(int week) {
         NoCourseItemFragment noCourseItemFragment = new NoCourseItemFragment();
@@ -78,7 +76,6 @@ public class NoCourseItemFragment extends BaseFragment {
         noCourseItemFragment.setArguments(args);
         return noCourseItemFragment;
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,7 +86,6 @@ public class NoCourseItemFragment extends BaseFragment {
         mNameList = getActivity().getIntent()
                 .getStringArrayListExtra(EXTRA_NAME_LIST);
     }
-
 
     @Nullable
     @Override

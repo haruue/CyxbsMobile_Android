@@ -73,7 +73,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="horizontal">
 
             <TextView
@@ -102,6 +103,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="horizontal">
 
             <TextView
@@ -117,7 +120,7 @@
             <EditText
                 android:id="@+id/edit_affair_et_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="12dp"
@@ -132,6 +135,7 @@
             android:id="@+id/edit_affair_weeks_layout"
             android:layout_width="match_parent"
             android:layout_height="85dp"
+            android:layout_gravity="center"
             android:background="@drawable/bg_layout"
             android:orientation="horizontal">
 
@@ -151,13 +155,12 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:ellipsize="middle"
-                android:layout_marginLeft="180dp"
-                android:layout_marginStart="180dp"
-                android:maxLength="16"
+                android:layout_marginLeft="190dp"
+                android:layout_marginStart="190dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="30dp"
                 android:maxLines="1"
+                android:layout_marginTop="35dp"
                 android:text="请选择周数"
                 android:textColor="#4d4d4d"
                 android:textSize="18sp" />
@@ -204,13 +207,12 @@
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:ellipsize="middle"
-                android:layout_marginLeft="180dp"
-                android:layout_marginStart="180dp"
-                android:maxLength="16"
+                android:ellipsize="end"
+                android:layout_marginLeft="190dp"
+                android:layout_marginStart="190dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="35dp"
                 android:maxLines="1"
                 android:text="选择时间"
                 android:textColor="#4d4d4d"
@@ -221,7 +223,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:paddingEnd="25dp"
                 android:paddingLeft="15dp"
@@ -253,7 +254,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="35dp"
                 android:text="提醒"
                 android:textColor="#4d4d4d"
                 android:textSize="18sp" />
@@ -264,12 +265,11 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:ellipsize="middle"
-                android:layout_marginLeft="180dp"
-                android:layout_marginStart="180dp"
-                android:maxLength="20"
+                android:layout_marginLeft="190dp"
+                android:layout_marginStart="190dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="35dp"
                 android:maxLines="1"
                 android:text="不提醒"
                 android:textColor="#4d4d4d"
@@ -281,7 +281,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:paddingEnd="25dp"
                 android:paddingLeft="15dp"
@@ -297,7 +296,8 @@
         android:background="#f5f5f5"
         app:behavior_hideable="true"
         app:behavior_peekHeight="300dp"
-        android:layout_marginTop="-1dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
         <RelativeLayout
@@ -322,7 +322,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:paddingEnd="15dp"
                 android:paddingLeft="15dp"

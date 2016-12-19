@@ -25,6 +25,7 @@ import com.mredrock.cyxbs.model.social.PersonLatest;
 import com.mredrock.cyxbs.model.social.UploadImgResponse;
 import com.mredrock.cyxbs.network.exception.RedrockApiException;
 import com.mredrock.cyxbs.network.func.AffairTransformFunc;
+import com.mredrock.cyxbs.network.func.AffairWeekFilterFunc;
 import com.mredrock.cyxbs.network.func.RedrockApiWrapperFunc;
 import com.mredrock.cyxbs.network.func.UpdateVerifyFunc;
 import com.mredrock.cyxbs.network.func.UserCourseFilterFunc;
@@ -277,7 +278,6 @@ public enum RequestManager {
 
         return emitObservable(observable, subscriber);
     }
-
 
     public void getPublicCourse(Subscriber<List<Course>> subscriber,
                                 List<String> stuNumList, String week) {
@@ -547,6 +547,35 @@ public enum RequestManager {
                .map(new AffairTransformFunc());
         emitObservable(observable,subscriber);
     }
+
+    public void getAffair(Subscriber<List<Affair>>subscriber, String stuNum, String idNum,int week){
+        Observable<List<Affair>> observable = redrockApiService.getAffair(stuNum, idNum)
+                .map(new AffairTransformFunc())
+                .map(new AffairWeekFilterFunc(week));
+        emitObservable(observable,subscriber);
+    }
+
+    public void addAffair(Subscriber<Object>subscriber,String stuNum,String idNum,String uid,String title,
+                          String content,String date,int time){
+        Observable<Object> observable = redrockApiService.addAffair(uid,stuNum,idNum,date,time,title,content)
+                .map(new RedrockApiWrapperFunc<>());
+        emitObservable(observable,subscriber);
+    }
+
+
+    public void editAffair(Subscriber<Object>subscriber,String stuNum,String idNum,String uid,String title,
+                           String content,String date,int time){
+        Observable<Object> observable = redrockApiService.editAffair(uid,stuNum,idNum,date,time,title,content)
+                .map(new RedrockApiWrapperFunc<>());
+        emitObservable(observable,subscriber);
+    }
+
+    public void deleteAffair(Subscriber<Object> subscriber ,String stuNum,String idNum, String uid){
+        Observable<Object> observable = redrockApiService.deleteAffair(stuNum,idNum,uid)
+                .map(new RedrockApiWrapperFunc<>());
+        emitObservable(observable,subscriber);
+    }
+
 
 
     private <T> Subscription emitObservable(Observable<T> o, Subscriber<T> s) {

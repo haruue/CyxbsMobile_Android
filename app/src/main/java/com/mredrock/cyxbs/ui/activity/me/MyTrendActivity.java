@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.model.User;
@@ -22,6 +23,7 @@ import com.mredrock.cyxbs.ui.activity.BaseActivity;
 import com.mredrock.cyxbs.ui.adapter.NewsAdapter;
 import com.mredrock.cyxbs.util.ImageLoader;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +48,26 @@ public class MyTrendActivity extends BaseActivity
     private NewsAdapter mNewsAdapter;
     private User mUser;
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_trend);
         ButterKnife.bind(this);
         initToolbar();
-
+        StatusBarUtil.setTranslucent(this, 50);
         init();
         showProgress();
     }
@@ -97,6 +112,7 @@ public class MyTrendActivity extends BaseActivity
     private void initToolbar() {
         if (toolbar != null) {
             toolbar.setTitle("");
+            toolbar.setNavigationIcon(R.drawable.back);
             toolbarTitle.setText("我的动态");
             setSupportActionBar(toolbar);
             toolbar.setNavigationOnClickListener(

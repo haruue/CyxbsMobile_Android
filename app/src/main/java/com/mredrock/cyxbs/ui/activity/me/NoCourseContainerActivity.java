@@ -8,19 +8,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.model.NoCourse;
 import com.mredrock.cyxbs.ui.activity.BaseActivity;
 import com.mredrock.cyxbs.ui.adapter.TabPagerAdapter;
 import com.mredrock.cyxbs.ui.fragment.me.NoCourseItemFragment;
 import com.mredrock.cyxbs.util.SchoolCalendar;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class NoCourseContainerActivity extends BaseActivity {
 
@@ -40,23 +42,36 @@ public class NoCourseContainerActivity extends BaseActivity {
 
     private TabPagerAdapter mTabPagerAdapter;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_no_course_container);
         ButterKnife.bind(this);
+        StatusBarUtil.setTranslucent(this, 50);
         initToolbar();
         initViewPager();
         initView();
     }
-
 
     private void initToolbar() {
         if (toolbar != null) {
             toolbar.setTitle("");
             toolbarTitle.setText("没课约");
             setSupportActionBar(toolbar);
+            toolbar.setNavigationIcon(R.drawable.back);
             toolbar.setNavigationOnClickListener(v -> NoCourseContainerActivity.this.finish());
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
@@ -85,7 +100,6 @@ public class NoCourseContainerActivity extends BaseActivity {
         noCourseViewPager.addOnPageChangeListener(new TabLayout
                 .TabLayoutOnPageChangeListener(noCourseTabLayout));
         noCourseTabLayout.setupWithViewPager(noCourseViewPager);
-
         noCourseViewPager.setCurrentItem(week);
     }
 

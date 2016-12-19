@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.model.AboutMe;
@@ -21,6 +22,7 @@ import com.mredrock.cyxbs.subscriber.SubscriberListener;
 import com.mredrock.cyxbs.ui.activity.BaseActivity;
 import com.mredrock.cyxbs.ui.activity.social.SpecificNewsActivity;
 import com.mredrock.cyxbs.ui.adapter.me.AboutMeAdapter;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +49,24 @@ public class AboutMeActivity extends BaseActivity implements
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relate_me);
         ButterKnife.bind(this);
+        StatusBarUtil.setTranslucent(this, 50);
         initToolbar();
         init();
         mAboutMeAdapter.setOnItemClickListener(this);
@@ -109,6 +125,7 @@ public class AboutMeActivity extends BaseActivity implements
     private void initToolbar() {
         if (toolbar != null) {
             toolbar.setTitle("");
+            toolbar.setNavigationIcon(R.drawable.back);
             toolbarTitle.setText("与我相关");
             setSupportActionBar(toolbar);
             toolbar.setNavigationOnClickListener(

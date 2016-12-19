@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.config.Const;
@@ -28,6 +29,7 @@ import com.mredrock.cyxbs.util.DialogUtil;
 import com.mredrock.cyxbs.util.ImageLoader;
 import com.mredrock.cyxbs.util.permission.AfterPermissionGranted;
 import com.mredrock.cyxbs.util.permission.EasyPermissions;
+import com.umeng.analytics.MobclickAgent;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -75,12 +77,25 @@ public class EditInfoActivity extends BaseActivity implements EasyPermissions.Pe
     private Uri mDestinationUri, cameraImageUri;
     private File dir;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_info);
         ButterKnife.bind(this);
+        StatusBarUtil.setTranslucent(this, 50);
         initToolbar();
         mUser = APP.getUser(this);
         initView();
@@ -189,6 +204,7 @@ public class EditInfoActivity extends BaseActivity implements EasyPermissions.Pe
             toolbar.setTitle("");
             toolbarTitle.setText("修改信息");
             setSupportActionBar(toolbar);
+            toolbar.setNavigationIcon(R.drawable.back);
             toolbar.setNavigationOnClickListener(v -> {
                 Intent intent = new Intent();
                 intent.putExtra(Const.Extras.EDIT_USER, mUser);
@@ -224,6 +240,8 @@ public class EditInfoActivity extends BaseActivity implements EasyPermissions.Pe
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
         options.setCompressionQuality(90);
+        options.setToolbarTitleTextColor(ContextCompat.getColor(this, R.color.black_lightly));
+        options.setLogoColor(ContextCompat.getColor(this,R.color.black_lightly));
         options.setToolbarColor(
                 ContextCompat.getColor(this, R.color.colorPrimary));
         options.setStatusBarColor(

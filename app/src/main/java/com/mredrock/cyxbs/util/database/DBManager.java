@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.gson.Gson;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.model.Affair;
+import com.mredrock.cyxbs.model.AffairApi;
 import com.mredrock.cyxbs.model.Course;
 
 import java.util.ArrayList;
@@ -36,20 +37,28 @@ public enum  DBManager {
 
 
 
-    public boolean insert(String uid,String stuNum,String json) {
-        open();
-        db.beginTransaction();  //开始事务
-        try {
-            db.execSQL("INSERT INTO affair(uid,stuNum,isUpload,data) VALUES ('" + uid
-                    +"','"+stuNum +"','"+false+"','"+json+"');");
-            db.setTransactionSuccessful();  //设置事务成功完成
+    public Observable insert(boolean isUpload,String uid,String stuNum,String json) {
+        return  Observable.create(subscriber -> {
 
-        } catch (Exception e){
-            return false;
-        } finally {
-            db.endTransaction();    //结束事务
-        }
-        return true;
+            db.execSQL("INSERT INTO affair(uid,stuNum,isUpload,data) VALUES ('" + uid
+                    + "','" + stuNum + "','" + isUpload + "','" + json + "');");
+            subscriber.onNext(null);
+            subscriber.onCompleted();
+        });
+    }
+
+
+
+    public Observable insert(boolean isUpload,String uid,String stuNum,String json, boolean delete) {
+        return  Observable.create(subscriber -> {
+            if (delete)
+                db.delete("affair", "uid = ?", new String[]{uid});
+
+            db.execSQL("INSERT INTO affair(uid,stuNum,isUpload,data) VALUES ('" + uid
+                    + "','" + stuNum + "','" + isUpload + "','" + json + "');");
+            subscriber.onNext(null);
+            subscriber.onCompleted();
+        });
     }
 
 
@@ -59,13 +68,39 @@ public enum  DBManager {
         db.update("affair", cv, "uid = ?", new String[]{uid});
     }
 
-    public Observable deleteAffair(String uid) {
-        open();
+    public Observable upDateAffair(String data,String uid){
         return Observable.create((subscriber -> {
+            open();
+            ContentValues values = new ContentValues();
+            values.put("data",uid);
+            db.update("affair",values,"uid = ?",new String[]{uid});
+            subscriber.onNext(null);
+            subscriber.onCompleted();
+        }));
+    }
+
+    public Observable deleteAffair(String uid) {
+        return Observable.create((subscriber -> {
+            open();
             db.delete("affair", "uid = ?", new String[]{uid});
             subscriber.onNext(null);
             subscriber.onCompleted();
         }));
+    }
+
+    public Observable<AffairApi.AffairItem> queryItem(String uid){
+        return Observable.create(subscriber -> {
+            open();
+            Cursor c = db.rawQuery("SELECT data FROM affair WHERE uid = "+uid,null);
+            String data = null;
+            if (c.moveToFirst()){
+                data = c.getString(0);
+            }
+            AffairApi.AffairItem item = new Gson().fromJson(data, AffairApi.AffairItem.class);
+            subscriber.onNext(item);
+            c.close();
+
+        });
     }
 
     public Observable<List<Course>> query(String stuNum,int week) {
@@ -81,11 +116,64 @@ public enum  DBManager {
             c.close();
             Gson gson = new Gson();
             for (String a : data){
-                Affair affair =  gson.fromJson(a,Affair.class);
-                if (week == 0)
-                    courses.add(affair);
-                else if (affair.week.contains(week))
-                    courses.add(affair);
+                AffairApi.AffairItem  affairItem =  gson.fromJson(a, AffairApi.AffairItem.class);
+                for (AffairApi.AffairItem.DateBean dateBean : affairItem.getDate()) {
+                    Affair affair = new Affair();
+                    affair.time = affairItem.getTime();
+                    affair.teacher = affairItem.getContent();
+                    affair.courseType = 2;
+                    affair.week = dateBean.getWeek();
+                    affair.hash_day = dateBean.getDay();
+                    affair.begin_lesson = 2 * affair.hash_day + 1;
+                    affair.hash_lesson = dateBean.getClassX();
+                    affair.period = 2;
+                    affair.uid = affairItem.getId();
+                    affair.course = affairItem.getTitle();
+
+                    if (week == 0)
+                        courses.add(affair);
+                    else if (affair.week.contains(week))
+                        courses.add(affair);
+                }
+
+            }
+            subscriber.onNext(courses);
+        });
+    }
+
+    public Observable<List<Course>> query(String stuNum,int week,boolean isUpload) {
+
+        return Observable.create(subscriber -> {
+            open();
+            Cursor c = db.rawQuery("SELECT data FROM affair WHERE stuNum = "+stuNum + "AND isUpload = " + isUpload  ,null);
+            List<String> data = new ArrayList<>();
+            List<Course> courses = new ArrayList<Course>();
+            while (c.moveToNext()) {
+                data.add(c.getString(0));
+            }
+            c.close();
+            Gson gson = new Gson();
+            for (String a : data){
+                AffairApi.AffairItem  affairItem =  gson.fromJson(a, AffairApi.AffairItem.class);
+                for (AffairApi.AffairItem.DateBean dateBean : affairItem.getDate()) {
+                    Affair affair = new Affair();
+                    affair.time = affairItem.getTime();
+                    affair.teacher = affairItem.getContent();
+                    affair.courseType = 2;
+                    affair.week = dateBean.getWeek();
+                    affair.hash_day = dateBean.getDay();
+                    affair.begin_lesson = 2 * affair.hash_day + 1;
+                    affair.hash_lesson = dateBean.getClassX();
+                    affair.period = 2;
+                    affair.uid = affairItem.getId();
+                    affair.course = affairItem.getTitle();
+
+                    if (week == 0)
+                        courses.add(affair);
+                    else if (affair.week.contains(week))
+                        courses.add(affair);
+                }
+
             }
             subscriber.onNext(courses);
         });

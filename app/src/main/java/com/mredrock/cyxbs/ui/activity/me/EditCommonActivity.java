@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.APP;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.component.widget.Toolbar;
@@ -33,19 +34,19 @@ import rx.Subscriber;
 public abstract class EditCommonActivity extends BaseActivity implements TextWatcher {
 
     @Bind(R.id.edit_common_toolbar)
-
-    Toolbar   editCommonToolbar;
+    Toolbar editCommonToolbar;
     @Bind(R.id.edit_common_et)
-    EditText  editCommonEt;
+    EditText editCommonEt;
     @Bind(R.id.edit_common_delete)
     ImageView editCommonDelete;
     @Bind(R.id.edit_common_count)
-    TextView  editCommonCount;
+    TextView editCommonCount;
 
-    protected User   mUser;
-    private   String editTextContent;
+    protected User mUser;
+    private String editTextContent;
 
-    protected abstract void provideData(Subscriber<RedrockApiWrapper<Object>> subscriber, String stuNum, String idNum, String info);
+    protected abstract void provideData(Subscriber<RedrockApiWrapper<Object>> subscriber, String
+            stuNum, String idNum, String info);
 
     protected abstract String getExtra();
 
@@ -54,14 +55,12 @@ public abstract class EditCommonActivity extends BaseActivity implements TextWat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_common);
         ButterKnife.bind(this);
-
+        StatusBarUtil.setTranslucent(this, 50);
         init();
     }
 
     private void init() {
-
         mUser = APP.getUser(this);
-
         switch (getExtra()) {
             case Const.Extras.EDIT_QQ:
                 editCommonEt.setHint("客官，留个QQ呗～");
@@ -79,6 +78,7 @@ public abstract class EditCommonActivity extends BaseActivity implements TextWat
                 editCommonToolbar.setTitle("昵称");
                 break;
         }
+
         editCommonEt.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getExtra()))});
         editCommonEt.setText(editTextContent);
         editCommonEt.setSelection(editCommonEt.getText().toString().length());
@@ -110,7 +110,6 @@ public abstract class EditCommonActivity extends BaseActivity implements TextWat
                         finish();
                     }
 
-
                     @Override
                     public boolean onError(Throwable e) {
                         super.onError(e);
@@ -141,7 +140,6 @@ public abstract class EditCommonActivity extends BaseActivity implements TextWat
                     }
                 })
                 .show();
-
     }
 
     @Override
@@ -150,12 +148,10 @@ public abstract class EditCommonActivity extends BaseActivity implements TextWat
         editCommonCount.setText(String.valueOf(num));
     }
 
-
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
 
     }
-
 
     @Override
     public void afterTextChanged(Editable s) {

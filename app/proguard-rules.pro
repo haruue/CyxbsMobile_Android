@@ -18,8 +18,10 @@
 #-------------------------------------------定制化区域----------------------------------------------
 #---------------------------------1.实体类---------------------------------
 -keep class com.mredrock.cyxbs.model.**{ *; }
+
 -keep class com.mredrock.cyxbs.network.**{ *;}
 -keep public class * extends android.support.v4.app.Fragment
+
 
 -keep public class * extends android.app.Fragment
 #-keepclasseswithmembernames class * { # 保持native方法不被混淆
@@ -70,6 +72,7 @@
   **[] $VALUES;
   public *;
 }
+
 #-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 #okhttp with retrofit
 

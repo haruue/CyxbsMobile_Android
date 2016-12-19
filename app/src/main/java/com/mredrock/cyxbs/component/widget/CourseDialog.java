@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.event.AffairDeleteEvent;
+import com.mredrock.cyxbs.model.Affair;
 import com.mredrock.cyxbs.model.Course;
+import com.mredrock.cyxbs.ui.activity.affair.EditAffairActivity;
 import com.mredrock.cyxbs.util.DensityUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -109,7 +111,9 @@ public class CourseDialog {
                         dialog.dismiss();
                     }));
                     modify.setOnClickListener((view -> {
-
+                        dialog.dismiss();
+                        Affair affair = (Affair) course;
+                        EditAffairActivity.editAffairActivityStart(context,affair);
                     }));
                     name.setText(course.course);
                     teacher.setText(course.teacher);

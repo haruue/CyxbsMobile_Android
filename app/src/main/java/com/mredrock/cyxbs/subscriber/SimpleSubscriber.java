@@ -7,6 +7,7 @@ import com.mredrock.cyxbs.BuildConfig;
 import com.mredrock.cyxbs.component.task.progress.ProgressCancelListener;
 import com.mredrock.cyxbs.component.task.progress.ProgressDialogHandler;
 import com.mredrock.cyxbs.util.LogUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -19,7 +20,7 @@ import rx.Subscriber;
  * Created by cc on 16/3/19.
  */
 public class SimpleSubscriber<T> extends Subscriber<T> implements ProgressCancelListener {
-    private Context               context;
+    private Context context;
     protected SubscriberListener<T> listener;
     private ProgressDialogHandler mProgressDialogHandler;
 
@@ -62,7 +63,7 @@ public class SimpleSubscriber<T> extends Subscriber<T> implements ProgressCancel
         } else {
             if (e instanceof SocketTimeoutException || e instanceof ConnectException || e instanceof UnknownHostException) {
                 if (BuildConfig.DEBUG) {
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
                 }
@@ -75,6 +76,8 @@ public class SimpleSubscriber<T> extends Subscriber<T> implements ProgressCancel
                     Toast.makeText(context, "HttpException: " + ((HttpException) e).response().raw().toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "此服务暂时不可用", Toast.LENGTH_SHORT).show();
+                    //友盟错误统计
+                    MobclickAgent.reportError(context, ((HttpException) e).response().raw().toString());
                 }
                 LogUtils.LOGE("HttpException", "RawResponse: " + ((HttpException) e).response().raw().toString());
             } else {
@@ -108,14 +111,14 @@ public class SimpleSubscriber<T> extends Subscriber<T> implements ProgressCancel
     private void showProgressDialog() {
         if (mProgressDialogHandler != null) {
             mProgressDialogHandler.obtainMessage(ProgressDialogHandler.SHOW_PROGRESS_DIALOG)
-                                  .sendToTarget();
+                    .sendToTarget();
         }
     }
 
     protected void dismissProgressDialog() {
         if (mProgressDialogHandler != null) {
             mProgressDialogHandler.obtainMessage(ProgressDialogHandler.DISMISS_PROGRESS_DIALOG)
-                                  .sendToTarget();
+                    .sendToTarget();
             mProgressDialogHandler = null;
         }
     }

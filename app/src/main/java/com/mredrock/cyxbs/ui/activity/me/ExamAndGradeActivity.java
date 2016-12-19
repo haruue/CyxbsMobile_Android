@@ -8,18 +8,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
+import com.jaeger.library.StatusBarUtil;
 import com.mredrock.cyxbs.R;
 import com.mredrock.cyxbs.ui.activity.BaseActivity;
 import com.mredrock.cyxbs.ui.adapter.TabPagerAdapter;
-
 import com.mredrock.cyxbs.ui.fragment.me.ExamScheduleFragment;
 import com.mredrock.cyxbs.ui.fragment.me.GradeFragment;
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class ExamAndGradeActivity extends BaseActivity {
 
@@ -34,15 +36,26 @@ public class ExamAndGradeActivity extends BaseActivity {
 
     private List<String> mTitleList;
     private List<Fragment> mFragmentList;
-
     private TabPagerAdapter mTabPagerAdapter;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam_and_grade);
         ButterKnife.bind(this);
+        StatusBarUtil.setTranslucent(this, 50);
         initToolbar();
         initViewPager();
     }
@@ -52,6 +65,7 @@ public class ExamAndGradeActivity extends BaseActivity {
             toolbar.setTitle("");
             toolbarTitle.setText("考试与成绩");
             setSupportActionBar(toolbar);
+            toolbar.setNavigationIcon(R.drawable.back);
             toolbar.setNavigationOnClickListener(v -> ExamAndGradeActivity.this.finish());
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
